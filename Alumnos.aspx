@@ -49,7 +49,7 @@
         <button type="button" class="btn btn-primary" id="btn_a">Agregar</button>
         <div class="row col-10 justify-content-center" style="margin-bottom:15px; margin-top:15px;">
             <div class=" col-6 form-inline justify-content-around">
-                <asp:TextBox runat="server" ID="Tb_buscar" CssClass="form-control" Width="400"></asp:TextBox>
+                <asp:TextBox runat="server" ID="Tb_buscar" CssClass="form-control" Width="400" AutoCompleteType="Disabled"></asp:TextBox>
                 <asp:Button runat="server" Text="Buscar" ID="Btn_buscar" OnClick="Btn_buscar_Click" CssClass="btn btn-primary" Width="100" />
             </div>
                 
@@ -93,13 +93,13 @@
                 <div class="modal-body">
                   <div class="col-12">
                       <div class="form-group">
-                          <div>
+                          <%--<div>
                               <label>Importar lista</label>
                           </div>
-                              <asp:FileUpload runat="server" />
+                              <asp:FileUpload runat="server" />--%>
                           <div style="margin-top:10px;">
                               <label>No de control</label>
-                              <asp:TextBox runat="server" ID="al_id" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" TextMode="Number" />
+                              <asp:TextBox runat="server" ID="al_id" CssClass="form-control text-uppercase" AutoCompleteType="Disabled"  TextMode="Number" />
                           </div>
                           <div style="margin-top:10px;">
                               <label>Nombre</label>
@@ -107,7 +107,7 @@
                           </div>
                           <div style="margin-top:10px;">
                               <label>Apellido Paterno</label>
-                              <asp:TextBox runat="server" ID="al_aPaterno" CssClass="form-control text-uppercase" AutoCompleteType="Disabled"  />
+                              <asp:TextBox runat="server" ID="al_aPaterno" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
                           </div>
                           <div style="margin-top:10px;">
                               <label>Apellido Materno</label>

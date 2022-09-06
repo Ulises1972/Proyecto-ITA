@@ -77,8 +77,9 @@
                               <asp:TextBox ID="ca_logo" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
                           </div>
                           <div>
-                              <label>Omoclave</label>
+                              <label>Homoclave</label>
                               <asp:TextBox ID="ca_omo" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
+                              <label>(3 Letras)</label>
                           </div>
                       </div>
                   </div>

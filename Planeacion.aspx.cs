@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
 namespace TutoriasWeb
 {
@@ -25,6 +26,9 @@ namespace TutoriasWeb
         //dsTutorias.Grupo_CompuestoDataTable dtgc;
         SqlConnection cnn = new SqlConnection("server=DESKTOP-1I96JTK\\SQLEXPRESS ; database=Tutoria ; integrated security = true");
         SqlCommand cmd = new SqlCommand();
+        
+        Metodos mt = new Metodos();
+        DataTable t = new DataTable();
         
 
         protected void Page_Load(object sender, EventArgs e)

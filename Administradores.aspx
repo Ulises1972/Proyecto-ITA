@@ -47,9 +47,9 @@
             
                 
         <div class="row col-12 justify-content-start">
-            <asp:GridView ID="GridView1" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
+            <asp:GridView ID="GridView1" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" runat="server" AutoGenerateColumns="false" 
+                CssClass="table table-bordered table-condensed table-responsive table-hover " DataKeyNames="ID">
                 <Columns>                    
-                    <asp:BoundField DataField="ID" HeaderText="ID"/>
                     <asp:BoundField DataField="Usuario" HeaderText="Usuario" />
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
                     <asp:BoundField DataField="A_Paterno" HeaderText="Apellido Paterno" />
@@ -69,6 +69,7 @@
                 </Columns>
             </asp:GridView>
         </div>
+        <asp:HiddenField runat="server" ID="hdnID" Value="" />
     </div>
 
     
@@ -86,10 +87,10 @@
                 <div class="modal-body">
                   <div class="col-12">
                       <div class="form-group">
-                              <asp:Label Text="" ID="ID" Visible="false" runat="server" />                                                     
+                                                                            
                           <div>
                               <label>Nombre</label>
-                              <asp:TextBox ID="Nombre" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
+                              <asp:TextBox ID="Nombre" runat="server" CssClass="form-control text-uppercase"  AutoCompleteType="Disabled" />
                           </div>
                           <div>
                               <label>Apellido Paterno</label>

@@ -29,12 +29,10 @@ namespace TutoriasWeb
                 gvCalificaciones.Visible = true;
                 gvCalificaciones.DataSource = dt;
                 gvCalificaciones.DataBind();
-                Btn_Promedio.Visible = true;
             }
             else
             {
                 gvCalificaciones.Visible = false;
-                Btn_Promedio.Visible = false;
             }
             
 
@@ -70,10 +68,206 @@ namespace TutoriasWeb
 
         protected void Btn_actualizar_Click(object sender, EventArgs e)
         {
-            
-            if(mt.AlumnoSaveCals(t1_1.Text, t1_2.Text, t2_1.Text, t2_2.Text, t3_1.Text, t3_2.Text, t4_1.Text, t4_2.Text, t5_1.Text, t5_2.Text, t6_1.Text, t6_2.Text, t7_1.Text, t7_2.Text, t8_1.Text, t8_2.Text, hdnID.Value))
+            string prom="";
+            double promedio = 0;
+            bool entra = true;
+            int cal = 0;
+            if (Metodos.toInt(t1_1.Text.Replace(" ", "")) > 0)
+            {
+                promedio += Metodos.toInt(t1_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t1_2.Text.Replace(" ", "")) > 0)
+            {
+                promedio += Metodos.toInt(t1_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else
+            {
+                if(t1_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t1_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t1_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t1_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t2_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t2_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t2_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t2_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if(entra)
+            {
+                if (t2_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t2_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if(t2_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t2_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t3_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t3_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t3_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t3_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t3_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t3_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t3_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t3_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t4_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t4_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t4_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t4_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t4_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t4_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t4_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t4_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t5_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t5_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t5_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t5_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t5_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t5_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t5_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t5_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t6_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t6_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t6_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t6_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t6_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t6_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t6_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t6_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t7_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t7_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t7_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t7_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t7_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t7_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t7_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t7_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+            if (Metodos.toInt(t8_1.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t8_1.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (Metodos.toInt(t8_2.Text.Replace(" ", "")) > 0 && entra)
+            {
+                promedio += Metodos.toInt(t8_2.Text.Replace(" ", ""));
+                cal++;
+            }
+            else if (entra)
+            {
+                if (t8_1.Text.Replace(" ", "") != "")
+                {
+                    prom = t8_1.Text.Replace(" ", "").ToUpper();
+                }
+                else if (t8_2.Text.Replace(" ", "") != "")
+                {
+                    prom = t8_2.Text.Replace(" ", "").ToUpper();
+                }
+
+                entra = false;
+            }
+
+            promedio /= cal;
+            if (promedio > 0 && prom=="")
+                prom = Math.Round(promedio,1).ToString();
+
+            if (mt.AlumnoSaveCals(t1_1.Text.ToUpper(), t1_2.Text.ToUpper(), t2_1.Text.ToUpper(), t2_2.Text.ToUpper(), t3_1.Text.ToUpper(), t3_2.Text.ToUpper(), t4_1.Text.ToUpper(), t4_2.Text.ToUpper(), t5_1.Text.ToUpper(), t5_2.Text.ToUpper(), t6_1.Text.ToUpper(), t6_2.Text.ToUpper(), t7_1.Text.ToUpper(), t7_2.Text.ToUpper(), t8_1.Text.ToUpper(), t8_2.Text.ToUpper(), prom, hdnID.Value))
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al guardar calificaciones, intente de nuevo o contacte a soporte.'); ", true);
+
+            if (mt.CalculaPromedios(Metodos.toInt(Session["id"].ToString())))
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al Calcular promedios, intente de nuevo o contacte a soporte.'); ", true);
             llenaGrid();
+
             cleanModal();
         }
 
@@ -102,11 +296,5 @@ namespace TutoriasWeb
             t8_2.Text = "";
         }
 
-        protected void Btn_Promedio_Click(object sender, EventArgs e)
-        {
-            if(mt.CalculaPromedios(Metodos.toInt(Session["id"].ToString())))
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al Calcular promedios, intente de nuevo o contacte a soporte.'); ", true);
-            llenaGrid();
-        }
     }
 }

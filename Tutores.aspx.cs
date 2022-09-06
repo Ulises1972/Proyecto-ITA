@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,7 +13,10 @@ namespace TutoriasWeb
     {
         dsTutoriasTableAdapters.MaestroTableAdapter ta = new dsTutoriasTableAdapters.MaestroTableAdapter();
         dsTutorias.MaestroDataTable dt;
-        
+
+        Metodos mt = new Metodos();
+        DataTable t = new DataTable();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -28,13 +32,19 @@ namespace TutoriasWeb
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.Rows[e.RowIndex].Cells[0].Text));
+            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value));
             actualizar();
         }
 
 
         protected void Btn_addTutor_Click(object sender, EventArgs e)
         {
+            if(tu_nombre.Text.Replace(" ","") == "" || tu_aPaterno.Text.Replace(" ","") == "" || tu_aMaterno.Text.Replace(" ","") == "" || tu_rfc.Text.Replace(" ","") == "")
+            {
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('Debe llenar todos los campos')", true);
+                cleanModal();
+                return;
+            }
             if(Btn_addTutor.Text == "Agregar")
             {
                 ta.Insert(tu_rfc.Text.ToUpper().Replace("  ", ""), tu_nombre.Text.ToUpper().Replace("  ", ""), tu_aPaterno.Text.ToUpper().Replace("  ", ""), tu_aMaterno.Text.ToUpper().Replace("  ", ""), "", Session["carrera"].ToString(), "ACTIVO");
@@ -50,14 +60,17 @@ namespace TutoriasWeb
 
         protected void actualizar()
         {
-            dt = ta.GetData(Session["carrera"].ToString());
+            t = mt.TutoresSelect(Session["carrera"].ToString(), Tb_buscar.Text.Replace(" ",""));
 
-            if(dt.Rows.Count > 0)
+            if(t.Rows.Count > 0)
             {
-                GridView1.DataSource = dt;
+                GridView1.DataSource = t;
                 GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GridView1.Visible = true;
+            }
+            else
+            {
+                GridView1.Visible = false;
             }
             
         }
@@ -98,20 +111,7 @@ namespace TutoriasWeb
 
         protected void Btn_uscar_Click(object sender, EventArgs e)
         {
-            dt = ta.GetDataByRFC(Tb_buscar.Text);
-
-            if (dt.Rows.Count > 0)
-            {
-                GridView1.DataSource = dt;
-                GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
-            }
-            else
-            {
-                GridView1.Visible = false;
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('No existen registros con dicho RFC. Intente de nuevo')", true);
-            }
+            actualizar();
         }
     }
 }

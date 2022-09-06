@@ -13,6 +13,8 @@ namespace TutoriasWeb
     {
         dsTutoriasTableAdapters.AlumnoTableAdapter ta = new dsTutoriasTableAdapters.AlumnoTableAdapter();
         dsTutorias.AlumnoDataTable dt;
+        Metodos mt = new Metodos();
+        DataTable t = new DataTable();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["id"] == null)
@@ -27,29 +29,44 @@ namespace TutoriasWeb
 
         protected void Btn_addAlumno_Click(object sender, EventArgs e)
         {
-            if (Btn_addAlumno.Text == "Agregar")
+            if(al_id.Text.Replace(" ","") == "" || al_nombre.Text.Replace(" ", "") == "" || ( al_aPaterno.Text.Replace(" ", "") == "" && al_aMaterno.Text.Replace(" ", "") == "" ) )
             {
-                ta.Insert(Convert.ToInt32(al_id.Text), al_nombre.Text.ToUpper(), al_aPaterno.Text.ToUpper(), al_aMaterno.Text.ToUpper(), 1, Session["carrera"].ToString(), "NO ASIGNADO", 0);
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Solo un campo de apellido puede ir vacio'); ", true);
+                cleanModal();
+                return;
+            }
+            if (Btn_addAlumno.Text=="Agregar")
+            {
+                if (mt.AlumnoAdd(Metodos.toInt(al_id.Text.Replace(" ", "")), al_nombre.Text.ToUpper(), al_aPaterno.Text.Replace(" ", "").ToUpper(), al_aMaterno.Text.Replace(" ", "").ToUpper(), Session["carrera"].ToString()))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al ingresar el alumno, asegurese de ingresar la informacion correcta y que no se repita el No de control'); ", true);
+                }
             }
             else
             {
-                dt = ta.GetDataByNo(Convert.ToInt32(al_id.Text));
-                ta.Update(Convert.ToInt32(al_id.Text), al_nombre.Text.ToUpper(), al_aPaterno.Text.ToUpper(), al_aMaterno.Text.ToUpper(), Convert.ToInt32(dt[0][4].ToString()), dt[0][5].ToString(), dt[0][6].ToString(), Convert.ToByte(dt[0][7].ToString()), Convert.ToInt32(al_id.Text));                
+                if (mt.AlumnoUpdate(Metodos.toInt(al_id.Text.Replace(" ", "")), al_nombre.Text.ToUpper(), al_aPaterno.Text.Replace(" ", "").ToUpper(), al_aMaterno.Text.Replace(" ", "").ToUpper()))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al actualizar la informacion, contacte a soporte'); ", true);
+                }
             }
+            
             cleanModal();
             actualiza();
         }
 
         protected void actualiza()
         {
-            dt = ta.GetData(Session["carrera"].ToString());
+            t = mt.AlumnosGetByCarrera(Session["carrera"].ToString(), Tb_buscar.Text.Replace(" ", ""));
 
-            if(dt.Rows.Count > 0)
+            if(t.Rows.Count > 0)
             {
-                GridView1.DataSource = dt;
+                GridView1.DataSource = t;
                 GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GridView1.Visible = true;
+            }
+            else
+            {
+                GridView1.Visible = false;
             }
             
         }
@@ -62,6 +79,7 @@ namespace TutoriasWeb
             Btn_addAlumno.Text = "Agregar";
             al_id.Enabled = true;
             Btn_cancel.Visible = false;
+            Tb_buscar.Text = "";
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -93,19 +111,7 @@ namespace TutoriasWeb
 
         protected void Btn_buscar_Click(object sender, EventArgs e)
         {
-            dt = ta.GetDataByNo(Convert.ToInt32(Tb_buscar.Text));
-
-            if (dt.Rows.Count > 0)
-            {
-                GridView1.DataSource = dt;
-                GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
-            }
-            else
-            {
-                ScriptManager.RegisterClientScriptBlock(this, GetType(), "alertMessage", "alert('No existen registros con dicho No. Control. Intente de nuevo')", true);
-            }
+            actualiza();
         }
     }
 }

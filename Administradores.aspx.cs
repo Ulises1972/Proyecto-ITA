@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -14,7 +15,9 @@ namespace TutoriasWeb
         
         dsTutoriasTableAdapters.CarreraTableAdapter tac = new dsTutoriasTableAdapters.CarreraTableAdapter();
         dsTutorias.CarreraDataTable dtc;
-        
+        Metodos mt = new Metodos();
+        DataTable dt = new DataTable();
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,13 +61,14 @@ namespace TutoriasWeb
 
         protected void Btn_addAdmin_Click(object sender, EventArgs e)
         {
-            if (Btn_addAdmin.Text == "Agregar")
+            if(Nombre.Text.Replace(" ", "") == "" || A_Paterno.Text.Replace(" ","") == "" || A_Materno.Text.Replace(" ","") == "" || Carrera.SelectedIndex == 0)
             {
-                taa.Insert(Carrera.SelectedValue.ToUpper() + "ADMIN", Nombre.Text.ToUpper(), A_Paterno.Text.ToUpper(), A_Materno.Text.ToUpper(), "", Carrera.SelectedItem.Text);
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Todos los campos son obligatorios'); ", true);
             }
-            else
+            dt = mt.AdministradoresAdd(Carrera.SelectedValue.ToUpper() + "ADMIN", Nombre.Text.ToUpper(), A_Paterno.Text.ToUpper(), A_Materno.Text.ToUpper(), Carrera.SelectedItem.Text, Metodos.toInt(hdnID.Value));           
+            if(dt != null && dt.Rows[0]["result"].ToString() == "0")
             {
-                taa.Update(Carrera.SelectedValue.ToUpper() + "ADMIN", Nombre.Text.ToUpper(), A_Paterno.Text.ToUpper(), A_Materno.Text.ToUpper(), "", Carrera.SelectedItem.Text, Convert.ToInt32(ID.Text));
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('" + dt.Rows[0]["msg"] + "'); ", true);
             }
             cleanModal();
             actualizar();
@@ -72,7 +76,9 @@ namespace TutoriasWeb
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            taa.Delete(Convert.ToInt32(GridView1.Rows[e.RowIndex].Cells[0].Text));
+            
+            hdnID.Value = GridView1.DataKeys[e.RowIndex].Value.ToString();
+            mt.AdministradorDelete(Metodos.toInt(hdnID.Value));
             actualizar();
         }
 
@@ -80,8 +86,8 @@ namespace TutoriasWeb
         {
             if(e.CommandName == "Editar")
             {
-                ID.Text = e.CommandArgument.ToString();
-                dta = taa.GetDataByID(Convert.ToInt32(ID.Text));
+                hdnID.Value = e.CommandArgument.ToString();
+                dta = taa.GetDataByID(Convert.ToInt32(hdnID.Value));
                 Nombre.Text = dta[0][2].ToString();
                 A_Paterno.Text = dta[0][3].ToString();
                 A_Materno.Text = dta[0][4].ToString();

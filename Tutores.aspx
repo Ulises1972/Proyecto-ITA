@@ -42,18 +42,17 @@
         <button type="button" class="btn btn-primary" id="btn_m">Agregar</button>
 
         <div class="row col-10 justify-content-center" style="margin-bottom:15px; margin-top:15px;">
-            <div class=" col-9 form-inline justify-content-around">
+            <div class=" col-6 form-inline justify-content-around">
                 <asp:TextBox runat="server" ID="Tb_buscar" CssClass="form-control" Width="400"></asp:TextBox>
                 <asp:Button runat="server" Text="Buscar" ID="Btn_uscar" OnClick="Btn_uscar_Click" CssClass="btn btn-primary" Width="100"/>
-                <label>(Ingresa RFC del Tutor)</label>
             </div>
         </div>
             
                 
         <div class="row col-12 justify-content-start">
-            <asp:GridView ID="GridView1" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
+            <asp:GridView ID="GridView1" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" runat="server" 
+                AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover " DataKeyNames="ID"  >
                 <Columns>
-                    <asp:BoundField DataField="ID" HeaderText="ID" />
                     <asp:BoundField DataField="RFC" HeaderText="RFC" />
                     <asp:BoundField DataField="Nombre_Maestro" HeaderText="Nombres" />
                     <asp:BoundField DataField="A_Paterno" HeaderText="Apellido Paterno" />

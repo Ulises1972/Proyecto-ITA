@@ -45,9 +45,6 @@
             </asp:GridView>                 
             <asp:HiddenField runat="server" ID="hdnID" />
         </div>
-    <div class="row col-12 justify-content-center" style="margin-top:20px;">
-        <asp:Button Text="Calcular Promedios" runat="server" CssClass="btn btn-primary" ID="Btn_Promedio" OnClick="Btn_Promedio_Click" />
-    </div>
 
     <div class="modal fade" id="mdl">
         <div class="modal-dialog modal-lg">
@@ -78,14 +75,14 @@
                                 <label >2</label>
                             </div>
                             <div class="row form-inline justify-content-lg-around">
-                                <asp:TextBox ID="t1_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t1_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t2_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t2_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t3_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t3_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t4_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t4_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t1_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t1_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t2_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t2_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t3_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t3_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t4_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t4_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
                             </div>
                             
                         </div>

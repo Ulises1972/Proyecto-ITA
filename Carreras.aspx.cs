@@ -26,16 +26,27 @@ namespace TutoriasWeb
 
         protected void Btn_addCarrera_Click(object sender, EventArgs e)
         {
+            if(ca_nombre.Text.Replace(" ","") == "" || ca_logo.Text.Replace(" ","") == "" || ca_omo.Text.Replace(" ","") == "")
+            {
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Debe llenar todos los campos'); ", true);
+                return;
+            }
+            if(ca_omo.Text.Replace(" ","").Length != 3)
+            {
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Deben ser 3 letras para la homoclave '); ", true);
+                return;
+            }
             if(Btn_addCarrera.Text == "Agregar")
             {
-                ta.Insert(ca_nombre.Text.ToUpper().Replace("  ", ""), ca_logo.Text.Replace(" ", ""), "ACTIVO", ca_omo.Text);
+                ta.Insert(ca_nombre.Text.ToUpper(), ca_logo.Text.Replace(" ", ""), "ACTIVO", ca_omo.Text.ToUpper());
             }
             else
             {
-                ta.Update(ca_nombre.Text.ToUpper().Replace("  ", ""), ca_logo.Text.Replace(" ", ""), "ACTIVO", ca_omo.Text, Convert.ToInt32(ID.Text));
+                ta.Update(ca_nombre.Text.ToUpper(), ca_logo.Text.Replace(" ", ""), "ACTIVO", ca_omo.Text.ToUpper(), Convert.ToInt32(ID.Text));
             }
             ca_nombre.Text = "";
             ca_logo.Text = "";
+            ca_omo.Text = "";
             actualizar();
         }
         protected void actualizar()

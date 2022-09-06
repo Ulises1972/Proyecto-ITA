@@ -24,8 +24,7 @@ namespace TutoriasWeb
             if (Session["id"] == null)
             {
                 Response.Redirect("Login.aspx");
-            }            
-
+            }
 
             if (!IsPostBack)
             {
@@ -109,7 +108,8 @@ namespace TutoriasWeb
                 {
                     t = mt.GrupoCom_AlumnoGetDataByGroup(grupo.SelectedValue);
                     if (t.Rows.Count > 0)
-                    {                        
+                    {
+                        calculos();
                         GridView1.DataSource = t;
                         GridView1.DataBind();
                         GridView1.UseAccessibleHeader = true;
@@ -118,33 +118,20 @@ namespace TutoriasWeb
                         GridView1.HeaderRow.Cells[5].Text += Metodos.toDate(t.Rows[0]["Entrevista2"].ToString());
                         GridView1.HeaderRow.Cells[6].Text += Metodos.toDate(t.Rows[0]["Entrevista3"].ToString());
 
-                        //ms = new DataTable();
-                        //ms = mt.MateriaGetDataByGrade(grupo.SelectedItem.Text.ElementAt(9), Session["carrera"].ToString());
-
-                        //if (ms.Rows.Count <= 5)
-                        //{
-                        //    ScriptManager.RegisterClientScriptBlock(this, GetType(), "modal", "alert('No estan registradas las 6 materias de la carrera, contacte al administrador.');", true);
-                        //    return;
-                        //}
-
-                        //GridView1.HeaderRow.Cells[9].Text = ms.Rows[0].ItemArray[2].ToString();
-                        //GridView1.HeaderRow.Cells[10].Text = ms.Rows[1].ItemArray[2].ToString();
-                        //GridView1.HeaderRow.Cells[11].Text = ms.Rows[2].ItemArray[2].ToString();
-                        //GridView1.HeaderRow.Cells[12].Text = ms.Rows[3].ItemArray[2].ToString();
-                        //GridView1.HeaderRow.Cells[13].Text = ms.Rows[4].ItemArray[2].ToString();
-                        //GridView1.HeaderRow.Cells[14].Text = ms.Rows[5].ItemArray[2].ToString();
-
                         GridView1.Visible = true;
-                        btnCalcular.Visible = true;
                         btnCerrar.Visible = true;
                     }
                     else
                     {
                         GridView1.Visible = false;
-                        btnCalcular.Visible = false;
                         btnCerrar.Visible = false;
                     }
                         
+                }
+                else
+                {
+                    GridView1.Visible = false;
+                    btnCerrar.Visible = false;
                 }
             }
             catch (Exception e)
@@ -179,12 +166,6 @@ namespace TutoriasWeb
 
         }
 
-        protected void btnCalcular_Click(object sender, EventArgs e)
-        {
-            calculos();
-            actualiza();
-        }
-
 
         protected void Btn_aceptar_Click(object sender, EventArgs e)
         {
@@ -205,7 +186,7 @@ namespace TutoriasWeb
                     Tutoria = Convert.ToInt32(t.Rows[i]["Tutoria"].ToString());
                     Semestre = Convert.ToInt32(t.Rows[i]["SemestreA"].ToString());
 
-                    if (t.Rows[i]["A"].ToString() == "SI")
+                    if (t.Rows[i]["A"].ToString() == "SI" && t.Rows[i]["B"].ToString() == "SI")
                     {
                         Estatus = Convert.ToInt32(t.Rows[i]["Tutoria"].ToString()) < 2 ? "NO ASIGNADO" : "CONCLUIDO";
                         Tutoria++;
@@ -219,7 +200,13 @@ namespace TutoriasWeb
 
                     mt.GrupoComUpdateSemestre(Semestre, resultado, t.Rows[i]["ID"].ToString());
                     mt.AlumnoCierreUpdate(Estatus, ++Semestre, Tutoria, t.Rows[i]["No_control"].ToString());
+                    //reportes
+                    Metodos.reporte3(Metodos.toInt(t.Rows[i]["No_control"].ToString()));
+
                 }
+                Metodos.Reporte4a(Metodos.toInt(t.Rows[0]["No_control"].ToString()), Metodos.toInt(grupo.SelectedValue));
+                Metodos.Reporte5(Metodos.toInt(grupo.SelectedValue));
+
                 if (Convert.ToInt32(tagc.Concluido(Convert.ToInt32(grupo.SelectedValue))) < 1)
                 {
                     if (mt.GrupoUpdateEstatus("CONCLUIDO", grupo.SelectedValue))

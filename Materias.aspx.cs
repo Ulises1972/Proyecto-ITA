@@ -46,16 +46,19 @@ namespace TutoriasWeb
 
             if (dt.Rows.Count > 0)
             {
+                GridView1.Visible = true;
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
+            else
+            {
+                GridView1.Visible = false;
             }
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            if(mt.MateriaDelete(GridView1.Rows[e.RowIndex].Cells[0].Text))
+            if(mt.MateriaDelete(GridView1.DataKeys[e.RowIndex].Value.ToString()))
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Algo salio mal, intentalo de nuevo o contacta a soporte'); ", true);
             actualizar();
         }

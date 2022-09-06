@@ -69,25 +69,47 @@ namespace TutoriasWeb
                 btnAceptar.Visible = true;
                 btnAceptar.Enabled = false;
                 gvMaterias.Visible = false;
+                gvSeleccionadas.Columns[2].Visible = false;
             }
         }
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            int[] ids = new int[6];
+            if(gvSeleccionadas.Rows.Count == 0)
+            {
+                ScriptManager.RegisterClientScriptBlock(this, GetType(), "alertMessage", "alert('Debes seleccionar por lo menos 1 materia')", true);
+                return;
+            }
+            int[] ids = new int[gvSeleccionadas.Rows.Count];
             for (int i = 0; i < gvSeleccionadas.Rows.Count; i++)
             {
-                ids[i] = Metodos.toInt(gvSeleccionadas.Rows[i].Cells[0].Text);                
+                ids[i] = Metodos.toInt(gvSeleccionadas.DataKeys[i].Value.ToString());
             }
             if(mt.GrupoComInsertMat(ids, Session["id"].ToString()))
                 ScriptManager.RegisterClientScriptBlock(this, GetType(), "alertMessage", "alert('Algo Salio mal, intente de nuevo o contacte a soporte')", true);
             btnAceptar.Enabled = false;
             gvMaterias.Visible = false;
             ddSemestre.Enabled = false;
+            gvSeleccionadas.Columns[2].Visible = false;
         }
 
         protected void gvSeleccionadas_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            string[] val = e.CommandArgument.ToString().Split(',');
+            int[] ids = new int[(gvSeleccionadas.Rows.Count-1)];
+            int j = 0;
 
+            for (int i = 0; i < gvSeleccionadas.Rows.Count; i++)
+            {
+                if (i == Metodos.toInt(val[1]))
+                    continue;
+                if (!ids.Contains(Metodos.toInt(gvSeleccionadas.DataKeys[i].Value.ToString())))
+                {
+                    ids[j] = Metodos.toInt(gvSeleccionadas.DataKeys[i].Value.ToString());
+                    j++;
+                }
+            }
+            gvSeleccionadas.DataSource = mt.MateriaGetDataByIds(ids);
+            gvSeleccionadas.DataBind();
         }
 
         protected void gvMaterias_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -95,20 +117,20 @@ namespace TutoriasWeb
             try
             {
                 int[] ids = new int[(gvSeleccionadas.Rows.Count + 1)];
-                if (gvSeleccionadas.Rows.Count >= 0 && gvSeleccionadas.Rows.Count <= 5)
+                if (gvSeleccionadas.Rows.Count >= 0 && gvSeleccionadas.Rows.Count <= 6)
                 {                    
                     for (int i=0; i< gvSeleccionadas.Rows.Count; i++)
                     {
-                        if (!ids.Contains(Metodos.toInt(gvSeleccionadas.Rows[i].Cells[0].Text)))
+                        if (!ids.Contains(Metodos.toInt(gvSeleccionadas.DataKeys[i].Value.ToString())))
                         {
-                            ids[i] = Metodos.toInt(gvSeleccionadas.Rows[i].Cells[0].Text);
+                            ids[i] = Metodos.toInt(gvSeleccionadas.DataKeys[i].Value.ToString());
                         }                                                                       
                     }
                     ids[(ids.Length-1)] = Metodos.toInt(e.CommandArgument.ToString());
                 }
                 else
                 {
-                    //mensaje
+                    ScriptManager.RegisterClientScriptBlock(this, GetType(), "alertMessage", "alert('No puedes cargar mas de 7 materias')", true);
                     return;
                 }
 
@@ -128,5 +150,6 @@ namespace TutoriasWeb
         {
             int r = e.NewSelectedIndex;
         }
+
     }
 }

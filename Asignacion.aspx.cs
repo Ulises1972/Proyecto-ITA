@@ -17,6 +17,9 @@ namespace TutoriasWeb
         dsTutorias.AlumnoDataTable dt;
 
         dsTutoriasTableAdapters.Grupo_CompuestoTableAdapter tagc = new dsTutoriasTableAdapters.Grupo_CompuestoTableAdapter();
+        Metodos mt = new Metodos();
+        DataTable t = new DataTable();
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,39 +32,28 @@ namespace TutoriasWeb
         }
 
         protected void actualiza()
-        {                                    
+        {
+            g_grupo.Items.Clear();
             if (g_grado.SelectedIndex != 0)
             {
-                dt = ta.GetDataByGrade(Convert.ToInt32(g_grado.SelectedValue), Session["carrera"].ToString());
-                GridView1.Visible = true;
+                t = mt.GruposSelect(Session["id"].ToString().Substring(0, 3), Metodos.toInt(g_grado.SelectedValue) + 1);                                
 
-                switch (Convert.ToInt32(g_grado.SelectedValue))
+                if (t.Rows.Count > 0)
                 {
-                    case 0:
-                        dtg = tag.GetDataByGrade1(Session["carrera"].ToString());
-                        break;
-                    case 1:
-                        dtg = tag.GetDataByGrade2(Session["carrera"].ToString());
-                        break;
-                    case 2:
-                        dtg = tag.GetDataByGrade3(Session["carrera"].ToString());
-                        break;
+                    g_grupo.Items.Add("Selecciona grupo");
+                    for (int i = 0; i < t.Rows.Count; i++)
+                    {
+                        g_grupo.Items.Add(t.Rows[i]["Nombre"].ToString());
+                        g_grupo.Items[i + 1].Value = t.Rows[i]["ID"].ToString();
+                    }
                 }
 
-                g_grupo.Items.Clear();
-                g_grupo.Items.Add("Selecciona grupo");
-                for (int i = 0; i < dtg.Rows.Count; i++)
+                t = mt.AlumnosGetToAsign(Session["carrera"].ToString(), Metodos.toInt(g_grado.SelectedValue));
+                if (t.Rows.Count > 0)
                 {
-                    g_grupo.Items.Add(dtg[i][1].ToString());
-                    g_grupo.Items[i + 1].Value = dtg[i][0].ToString();
-                }
-
-                if (dt.Rows.Count > 0)
-                {
-                    GridView1.DataSource = dt;
+                    GridView1.Visible = true;
+                    GridView1.DataSource = t;
                     GridView1.DataBind();
-                    GridView1.UseAccessibleHeader = true;
-                    GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;                      
                 }
                 else
                 {
@@ -79,21 +71,28 @@ namespace TutoriasWeb
         {
             try
             {
-                for (int i = 0; i < GridView1.Rows.Count; i++)
+                if(g_grupo.SelectedIndex > 0)
                 {
-                    CheckBox chkRow = (GridView1.Rows[i].Cells[7].Controls[1].FindControl("checkBox") as CheckBox);
-                    if (chkRow.Checked)
+                    for (int i = 0; i < GridView1.Rows.Count; i++)
                     {
-                        tagc.Insert1(Convert.ToInt32(g_grupo.SelectedValue.ToString()), Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
-                        ta.UpdateStatus("En Curso", Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
+                        CheckBox chkRow = (GridView1.Rows[i].Cells[5].FindControl("checkBox") as CheckBox);
+                        if (chkRow.Checked)
+                        {
+                            tagc.Insert1(Convert.ToInt32(g_grupo.SelectedValue.ToString()), Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
+                            ta.UpdateStatus("En Curso", Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
+                        }
                     }
+                    g_grupo.SelectedIndex = 0;
+                    actualiza();
                 }
-                g_grupo.SelectedIndex = 0;
-                actualiza();
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Debe seleccionar un grupo');", true);
+                }
             }
             catch(Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + ex.Message + "');", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Error al asignar, contacte a soporte');", true);
             }
             
         }

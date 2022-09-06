@@ -33,15 +33,6 @@ namespace TutoriasWeb
         protected global::System.Web.UI.WebControls.HiddenField hdnID;
 
         /// <summary>
-        /// Control Btn_Promedio.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Btn_Promedio;
-
-        /// <summary>
         /// Control mdTitle.
         /// </summary>
         /// <remarks>

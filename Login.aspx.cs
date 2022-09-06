@@ -17,146 +17,59 @@ namespace TutoriasWeb
 {
     public partial class Login : System.Web.UI.Page
     {
-
-        //ConexionBD cn = new ConexionBD();
-        private SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TutoriaConnectionString1"].ConnectionString);
+        Metodos mt = new Metodos();
+        DataTable dt = new DataTable();
         protected void Page_Load(object sender, EventArgs e)
         {
-            //pdf_Click(sender, e);
+            pdf_Click(sender, e);
         }
 
         protected void btn_login_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("entra");
-            try
-            { 
-                if (in_user.Value == "adminsu" && in_pass.Value == "041112!")
-                {
-                    Session["id"] = in_user.Value;                  
+            dt = mt.login(in_user.Value.Replace(" ", ""), in_pass.Value.Replace(" ", ""));
+            switch (dt.Rows[0]["result"])
+            {
+                case ("adminsu"):
+                    Session["id"] = in_user.Value;
                     Response.Redirect("Home.aspx", false);
-                }
-                else
-                {
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM Maestro Where RFC='" + in_user.Value + "' and Clave is null;", con);
-                    SqlDataReader rd = cmd.ExecuteReader();
-                    if (string.IsNullOrEmpty(in_pass.Value))
-                    {
-                        if (rd.Read())
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "openModal(); ", true);
-                        }
-                        else
-                        {
-                            rd.Close();
-                            cmd = new SqlCommand("SELECT * FROM Administrador Where Usuario='" + in_user.Value + "' and Clave is null;", con);
-                            rd = cmd.ExecuteReader();
-                            if (rd.Read())
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "openModal(); ", true);
-                            }
-                            else
-                            {
-                                rd.Close();
-                                cmd = new SqlCommand("SELECT * FROM Alumno Where No_control=" + in_user.Value + " and Clave is null;", con);
-                                rd = cmd.ExecuteReader();
-                                if (rd.Read())
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "openModal(); ", true);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('Usuario y contraseña incorrectos. Intente de nuevo')", true);
-                                }
-                            }
-                        }
-                        rd.Close();
-                    }
-                    else
-                    {
-                        rd.Close();
-                        cmd = new SqlCommand("SELECT ID, Carrera FROM Maestro Where RFC='" + in_user.Value + "' and Clave='" + in_pass.Value + "';", con);
-                        rd = cmd.ExecuteReader();
-                        if (rd.Read())
-                        {
-                            Session["id"] = in_user.Value;
-                            Session["id_m"] = rd[0].ToString();
-                            Session["carrera"] = rd["Carrera"].ToString();
-                            Response.Redirect("Home.aspx", false);
-                        }
-                        else
-                        {
-                            rd.Close();
-                            cmd = new SqlCommand("SELECT Carrera FROM Administrador Where Usuario='" + in_user.Value + "' and Clave='" + in_pass.Value + "';", con);
-                            rd = cmd.ExecuteReader();
-                            if (rd.Read())
-                            {
-                                Session["id"] = in_user.Value;
-                                Session["carrera"] = rd["Carrera"].ToString();
-                                Response.Redirect("Home.aspx", false);
-                            }
-                            else
-                            {
-                                rd.Close();
-                                cmd = new SqlCommand("SELECT Carrera FROM Alumno Where No_control='" + in_user.Value + "' and Clave='" + in_pass.Value + "';", con);
-                                rd = cmd.ExecuteReader();
-                                if (rd.Read())
-                                {
-                                    Session["id"] = in_user.Value;
-                                    Session["carrera"] = rd["Carrera"].ToString();
-                                    Response.Redirect("Home.aspx", false);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('Usuario y contraseña incorrectos. Intente de nuevo')", true);
-                                }
-                            }
+                    break;
 
+                case ("modal"):
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "openModal(); ", true);
+                    break;
 
-                        }
+                case ("alumno"):
+                    Session["id"] = in_user.Value;
+                    Session["carrera"] = dt.Rows[0]["carrera"];
+                    Response.Redirect("Home.aspx", false);
+                    break;
 
-                        rd.Close();
-                    }
+                case ("tutor"):
+                    Session["id"] = in_user.Value;
+                    Session["carrera"] = dt.Rows[0]["carrera"];
+                    Session["id_m"] = dt.Rows[0]["id_m"];
+                    Response.Redirect("Home.aspx", false);
+                    break;
 
-                    con.Close();
-                }
-            }
-            catch (Exception ex ){
-                MessageBox.Show(ex.Message);
+                case ("admon"):
+                    Session["id"] = in_user.Value;
+                    Session["carrera"] = dt.Rows[0]["carrera"];
+                    Response.Redirect("Home.aspx", false);
+                    break;
+
+                case ("error"):
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('Usuario y contraseña incorrectos. Intente de nuevo')", true);
+                    break;
             }
         }
 
         protected void Btn_addPass_Click(object sender, EventArgs e)
         {
-            if(pass.Text == pass2.Text)
-            {
-                dsTutoriasTableAdapters.AdministradorTableAdapter taa = new dsTutoriasTableAdapters.AdministradorTableAdapter();
-                dsTutorias.AdministradorDataTable dta = taa.GetDataByUser(in_user.Value);
-                Metodos mt = new Metodos();
-                if(dta.Rows.Count > 0)
-                {
-                    taa.UpdateClave(pass.Text, in_user.Value);
-                }
-                else
-                {
-                    dsTutoriasTableAdapters.MaestroTableAdapter ta = new dsTutoriasTableAdapters.MaestroTableAdapter();
-                    dsTutorias.MaestroDataTable dt = ta.GetDataByRFC(in_user.Value);
-                    if(dt.Rows.Count > 0)
-                    {
-                        ta.UpdateClave(pass.Text, in_user.Value);
-                    }
-                    else
-                    {
-                        if(mt.AlumnoPasswordUpdate(pass.Text, in_user.Value))
-                            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('Usuario y contraseña incorrectos. Intente de nuevo')", true);
-                    }
-                    
-                }
-            }
-            else
+            if(mt.updatePassword(in_user.Value.Replace(" ",""), pass.Text, pass2.Text))
             {
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "alert('Las Contraseñas no coinciden, intente de nuevo');", true);
             }
+
             pass.Text = "";
             pass2.Text = "";
         }
@@ -244,7 +157,7 @@ namespace TutoriasWeb
             //    // ...and start a viewer.
             //    Process.Start(filename);
             //}
-            Metodos.Reporte5(1004);
+            Metodos.Reporte5(3);
             
         }
 

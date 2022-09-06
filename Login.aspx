@@ -29,6 +29,7 @@
                                 <div class="form-group col">
                                     <label class="form-label text-color-dark text-3">Usuario</label>
                                     <input runat="server" type="text" id="in_user" size="20" maxlength="20" class="form-control form-control-lg text-4" autocomplete="off" required="required"/> 
+                                    
                                 </div>
                             </div>
                             <div class="row">
@@ -50,9 +51,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row col-12 justify-content-center">
+                <%--<div class="row col-12 justify-content-center">
                     <asp:Button Text="Generar PDF" runat="server" ID="pdf" CssClass="btn btn-primary" OnClick="pdf_Click" CausesValidation="false"/>
-                </div>
+                </div>--%>
             </div>
         </div>
     </div>
@@ -73,11 +74,11 @@
                       <div class="form-group">
                           <div>
                               <label>Contraseña</label>
-                              <asp:TextBox ID="pass" runat="server" CssClass="form-control" />
+                              <asp:TextBox ID="pass" runat="server" CssClass="form-control" TextMode="Password" />
                           </div>
                           <div>
                               <label>Confirma Contraseña</label>
-                              <asp:TextBox ID="pass2" runat="server" CssClass="form-control" />
+                              <asp:TextBox ID="pass2" runat="server" CssClass="form-control" TextMode="Password" />
                           </div>
                       </div>
                   </div>

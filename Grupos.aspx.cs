@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -20,6 +21,8 @@ namespace TutoriasWeb
 
         dsTutoriasTableAdapters.AlumnoTableAdapter taa = new dsTutoriasTableAdapters.AlumnoTableAdapter();
         dsTutorias.AlumnoDataTable dta;
+        Metodos mt = new Metodos();
+        DataTable t = new DataTable();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,79 +31,59 @@ namespace TutoriasWeb
                 Response.Redirect("Login.aspx");
             }
 
-            dtt = tta.GetData(Session["carrera"].ToString()) ;
-
-            if(!(gr_tutor.Items.Count > 0))
+            if (!IsPostBack)
             {
+                dtt = tta.GetData(Session["carrera"].ToString());
+
                 gr_tutor.Items.Add("Seleccionar");
                 for (int i = 0; i < dtt.Rows.Count; i++)
                 {
-                    gr_tutor.Items.Add(dtt[i][2].ToString().Replace("  ","") + " " +dtt[i][3].ToString().Replace("  ", "") + " " + dtt[i][4].ToString().Replace("  ", ""));
+                    gr_tutor.Items.Add(dtt[i][2].ToString().Replace("  ", "") + " " + dtt[i][3].ToString().Replace("  ", "") + " " + dtt[i][4].ToString().Replace("  ", ""));
                     gr_tutor.Items[i + 1].Value = dtt[i][0].ToString();
                 }
-            }
 
-            dta = taa.GetDataByGrade(0, Session["carrera"].ToString());
-            lb1.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 1ER grado";
-            dta = taa.GetDataByGrade(1, Session["carrera"].ToString());
-            lb2.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 2DO grado";
-            dta = taa.GetDataByGrade(2, Session["carrera"].ToString());
-            lb3.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 3ER grado";
-
-
-            if (!IsPostBack)
-            {
+                dta = taa.GetDataByGrade(0, Session["carrera"].ToString());
+                lb1.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 1ER grado";
+                dta = taa.GetDataByGrade(1, Session["carrera"].ToString());
+                lb2.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 2DO grado";
+                dta = taa.GetDataByGrade(2, Session["carrera"].ToString());
+                lb3.Text = "Usted tiene " + dta.Rows.Count + " alumnos para 3ER grado";
+                
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('antes de continuar asegurese que esten eliminados los alumnos que por alguna razon desertaron de la carrera')", true);
+                
                 actualiza();
             }
-            
         }
 
         protected void actualiza()
         {
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('antes de continuar asegurese que esten eliminados los alumnos que por alguna razon eliminaron la carrera')", true);
-            dt = ta.GetData(Session["carrera"].ToString());
+            t = mt.GruposSelect(Session["id"].ToString().Substring(0,3));
 
-            if(dt.Rows.Count > 0)
+            if(t.Rows.Count > 0)
             {
-                GridView1.DataSource = dt;
+                GridView1.DataSource = t;
                 GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GridView1.Visible = true;
+            }
+            else
+            {
+                GridView1.Visible = false;
             }
            
         }
 
         protected void Btn_addGroup_Click(object sender, EventArgs e)
         {
-            int j = 0;
-            switch (Convert.ToInt32(gr_tutoria.SelectedValue))
+            if(gr_tutor.SelectedIndex == 0 || gr_tutoria.SelectedIndex == 0)
             {
-                case 1:
-                    dt = ta.GetDataByGrade1(Session["carrera"].ToString());
-                    break;
-                case 2:
-                    dt = ta.GetDataByGrade2(Session["carrera"].ToString());
-                    break;
-                case 3:
-                    dt = ta.GetDataByGrade3(Session["carrera"].ToString());
-                    break;
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Ambos campos son necesarios'); ", true);
+                return;
             }
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if (mt.GrupoAddUpdate(Metodos.toInt(ID.Text),Metodos.toInt(gr_tutoria.SelectedValue),Metodos.toInt(gr_tutor.SelectedValue), Session["id"].ToString().Substring(0,3).ToUpper()))
             {
-                if (dt[i][1].ToString().Substring(9,1) == gr_tutoria.SelectedValue)
-                {
-                    j++;
-                }
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al guardar la informacion, contacte a soporte'); ", true);
             }
-
-            if (Btn_addGroup.Text == "Agregar")
-            {
-                ta.Insert1(Session["id"].ToString().Substring(0, 3).ToUpper() +  "2022A-"+ gr_tutoria.SelectedValue + Convert.ToChar(65 + j) , Convert.ToInt32(gr_tutor.SelectedValue), "ACTIVO");
-            }
-            else
-            {
-                ta.Update1(Session["id"].ToString().Substring(0, 3).ToUpper() + "2022A-" + gr_tutoria.SelectedValue + Convert.ToChar(65 + (j+1)), Convert.ToInt32(gr_tutor.SelectedValue), "ACTIVO", Convert.ToInt32(ID.Text));
-            }
+            
             cleanModal();
             actualiza();
         }
@@ -121,7 +104,7 @@ namespace TutoriasWeb
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.Rows[Convert.ToInt32(e.RowIndex)].Cells[0].Text));
+            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.DataKeys[Convert.ToInt32(e.RowIndex)].Value.ToString()));
             actualiza();
         }
 

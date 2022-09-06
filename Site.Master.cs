@@ -20,47 +20,51 @@ namespace TutoriasWeb
             }
             else
             {
-                dsTutoriasTableAdapters.InstitutoTableAdapter ta = new dsTutoriasTableAdapters.InstitutoTableAdapter();
-                dsTutorias.InstitutoDataTable dt = ta.GetData();
-                
-                if (dt.Rows.Count > 0)
+                if (!IsPostBack)
                 {
-                    img_instituto.ImageUrl = dt[0][2].ToString();
-                    img_instituto.Visible = true;
-                }
-                
-                if (Session["id"].ToString() == "adminsu")
-                {
-                    su.Visible = true;
-                }
-                else if(Metodos.toInt(Session["ID"].ToString()) > 0)
-                {
-                    alumno.Visible = true;
-                }
-                else
-                {
-                    dsTutoriasTableAdapters.CarreraTableAdapter tac = new dsTutoriasTableAdapters.CarreraTableAdapter();
-                    dsTutorias.CarreraDataTable dtc = tac.GetDataByNombre(Session["carrera"].ToString());
 
-                    if (dtc.Rows.Count > 0)
+
+                    dsTutoriasTableAdapters.InstitutoTableAdapter ta = new dsTutoriasTableAdapters.InstitutoTableAdapter();
+                    dsTutorias.InstitutoDataTable dt = ta.GetData();
+
+                    if (dt.Rows.Count > 0)
                     {
-                        img_carrera.ImageUrl = dtc[0][2].ToString();
+                        img_instituto.ImageUrl = dt[0][2].ToString();
+                        img_instituto.Visible = true;
                     }
-                    if (Session["ID"].ToString().Substring(3, 5).ToUpper() == "ADMIN")
+
+                    if (Session["id"].ToString() == "adminsu")
                     {
-                        admin.Visible = true;
-                        reportes.Visible = true;
+                        su.Visible = true;
+                    }
+                    else if (Metodos.toInt(Session["ID"].ToString()) > 0)
+                    {
+                        alumno.Visible = true;
                     }
                     else
                     {
-                        string d = Session["ID"].ToString().Substring(3, 5);
-                        tutor.Visible = true;
-                        reportes.Visible = true;
+                        dsTutoriasTableAdapters.CarreraTableAdapter tac = new dsTutoriasTableAdapters.CarreraTableAdapter();
+                        dsTutorias.CarreraDataTable dtc = tac.GetDataByNombre(Session["carrera"].ToString());
+
+                        if (dtc.Rows.Count > 0)
+                        {
+                            img_carrera.ImageUrl = dtc[0][2].ToString();
+                        }
+                        if (Session["ID"].ToString().Substring(3, 5).ToUpper() == "ADMIN")
+                        {
+                            admin.Visible = true;
+                            reportes.Visible = true;
+                        }
+                        else
+                        {
+                            tutor.Visible = true;
+                            reportes.Visible = true;
+                        }
+                        img_carrera.Visible = true;
                     }
-                    img_carrera.Visible = true;
+                    menu.Visible = true;
+                    btn_logout.Visible = true;
                 }
-                menu.Visible = true;                
-                btn_logout.Visible = true;
             }
             
 

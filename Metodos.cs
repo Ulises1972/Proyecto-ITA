@@ -19,6 +19,76 @@ namespace TutoriasWeb
         SqlDataReader dr;
         DataTable dt = new DataTable();
 
+        public DataTable login(string user, string pass)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            tr = cmd.Connection.BeginTransaction();
+            cmd.Transaction = tr;
+            cmd.CommandText = "declare @user varchar(30) = '" + user + "', @pasword varchar(300) ='" + pass + "' if @user = 'adminsu' " +
+                "and @pasword = '041112!' select 'adminsu' result else BEGIN select(case when(select id from Maestro where RFC = @user " +
+                "and Clave = '' and Estatus = 'ACTIVO') > 0 then 'modal' when(select id from Maestro where RFC = @user and Clave = @pasword " +
+                "and Estatus = 'ACTIVO') > 0 then 'tutor' when(select No_control from Alumno where cast(No_control as varchar) = @user and " +
+                "isnull(Clave, '') = '') > 0 then 'modal' when(select No_control from Alumno where cast(No_control as varchar) = @user and " +
+                "Clave = @pasword) > 0 then 'alumno' when(select id from Administrador where Usuario = @user and Clave = '') > 0 then 'modal'" +
+                "when(select id from Administrador where Usuario = @user and Clave = @pasword) > 0 then 'admon' else 'error' end) result, "+
+	            "isnull((select Carrera from Maestro where RFC = @user and Clave = @pasword and Estatus = 'ACTIVO'), isnull((select Carrera " +
+                "from Alumno where cast(No_control as varchar) = @user and Clave = @pasword), isnull((select carrera from administrador where " +
+                "Usuario = @user and clave =@pasword),''))) carrera, isnull((select id from Maestro " +
+                "where RFC = @user and Clave = @pasword and Estatus = 'ACTIVO'),'') id_m END";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public bool updatePassword(string user, string password1, string password2)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            tr = cmd.Connection.BeginTransaction();
+            cmd.Transaction = tr;
+            cmd.CommandText = "declare @pass1 varchar(300) = '" + password1 + "', @pass2 varchar(300) = '" + password2 + "', @user varchar(30) " +
+                "= '" + user + "' if (@pass1 = @pass2) BEGIN if (exists(select id from Administrador where Usuario = @user and isnull(clave, '') " +
+                "= '')) update Administrador set clave = @pass1 where Usuario = @user else if (exists(select id from Maestro where rfc = @user " +
+                "and Estatus = 'ACTIVO' and isnull(Clave, '') = '')) update Maestro set Clave = @pass1 where RFC = @user and isnull(Clave, '') " +
+                "= '' and Estatus='ACTIVO' else update Alumno set Clave = @pass1 where cast(No_control as varchar) = @user and isnull(Clave,'') = '' END ";
+
+            try
+            {
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    tr.Rollback();
+                    return true;
+                }
+                else
+                {
+                    tr.Commit();
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
         public bool AlumnoCalificar(string Estatus, int Tutoria, int Semestre, int NoControl, int Promedio)
         {
             cmd.Connection = cnn;
@@ -297,6 +367,31 @@ namespace TutoriasWeb
             }
         }
 
+        public DataTable TutoresSelect(string Carrera, string filtro)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "declare @carrera varchar(30) ='" + Carrera + "', @filtro varchar(50) = '" + filtro + "' select ID, RFC, " +
+                "Nombre_Maestro, A_Paterno, A_Materno from Maestro where Carrera = @carrera and Estatus = 'activo' and 1 = (case when " +
+                "@filtro = '' then 1 when rfc like '%' + @filtro + '%' then 1 when Nombre_Maestro +' ' + A_Paterno + ' ' + A_Materno like " +
+                "'%' + @filtro + '%' then 1 else 0 end)";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
         public DataTable MateriaSelect(string Carrera)
         {
             cmd.Connection = cnn;
@@ -368,14 +463,14 @@ namespace TutoriasWeb
             }
         }
 
-        public bool AlumnoSaveCals( string u1_1, string u1_2, string u2_1, string u2_2, string u3_1, string u3_2, string u4_1, string u4_2, string u5_1, string u5_2, string u6_1, string u6_2, string u7_1, string u7_2, string u8_1, string u8_2, string IDrelacion)
+        public bool AlumnoSaveCals( string u1_1, string u1_2, string u2_1, string u2_2, string u3_1, string u3_2, string u4_1, string u4_2, string u5_1, string u5_2, string u6_1, string u6_2, string u7_1, string u7_2, string u8_1, string u8_2, string promedio, string IDrelacion)
         {
             dt = new DataTable();
             cmd.Connection = cnn;
             cmd.Connection.Open();
             cmd.CommandText = " update Alumno_Materia set u1_1='" + u1_1 + "', u1_2='" + u1_2 + "', u2_1='" + u2_1 + "', u2_2='" + u2_2 + "', u3_1='" +
                 u3_1 + "', u3_2='" + u3_2 + "', u4_1='" + u4_1 + "', u4_2='" + u4_2 + "', u5_1='" + u5_1 + "', u5_2='" + u5_2 + "', u6_1='" + u6_1 + 
-                "', u6_2='" + u6_2 + "', u7_1='" + u7_1 + "', u7_2='" + u7_2 + "', u8_1='" + u8_1 + "', u8_2='" + u8_2 + "' where id=" + IDrelacion;
+                "', u6_2='" + u6_2 + "', u7_1='" + u7_1 + "', u7_2='" + u7_2 + "', u8_1='" + u8_1 + "', u8_2='" + u8_2 + "', Promedio='"+ promedio + "' where id=" + IDrelacion;
             try
             {
                 dr = cmd.ExecuteReader();
@@ -479,6 +574,7 @@ namespace TutoriasWeb
                     else
                     {
                         tr.Commit();
+                        //PasaPromedios(NoControl);
                         return false;
                     }
                 }
@@ -494,7 +590,27 @@ namespace TutoriasWeb
             else
                 return true;
         }
-        public DataTable AlumnoGetCalsBySem(int NoControl, int Semestre)//semestre sero para indicar semestre actual
+
+        protected void PasaPromedios(int NoControl)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "select ";
+            try
+            {
+                cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+               
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable AlumnoGetCalsBySem(int NoControl, int Semestre)//semestre cero para indicar semestre actual
         {
             dt = new DataTable();
             cmd.Connection = cnn;
@@ -525,7 +641,7 @@ namespace TutoriasWeb
             dt = new DataTable();
             cmd.Connection = cnn;
             cmd.Connection.Open();
-            cmd.CommandText = " Select (select Nombre from Materia where ID=" + IdMateria + ") Nombre, a.u1_1,a.u1_2,a.u2_1,a.u2_2,a.u3_1,a.u3_2,a.u4_1,a.u4_2,a.u5_1,a.u5_2,a.u6_1,a.u6_2" +
+            cmd.CommandText = " Select (select Nombre from Materia where ID=a.idMateria) Nombre, a.u1_1,a.u1_2,a.u2_1,a.u2_2,a.u3_1,a.u3_2,a.u4_1,a.u4_2,a.u5_1,a.u5_2,a.u6_1,a.u6_2" +
                 ",a.u7_1,a.u7_2,a.u8_1,a.u8_2 from Alumno_Materia a where a.ID=" + IdMateria;
             try
             {
@@ -557,8 +673,8 @@ namespace TutoriasWeb
             }
             try
             {
-                int r = cmd.ExecuteNonQuery();
-                if (r != 1)
+                int r = toInt(cmd.ExecuteNonQuery().ToString());
+                if (r <= 0)
                 {
                     tr.Rollback();
                     return true;
@@ -596,7 +712,7 @@ namespace TutoriasWeb
             }
             catch (Exception ex)
              {
-                return null;
+                return dt;
             }
             finally
             {
@@ -726,8 +842,203 @@ namespace TutoriasWeb
         {
             cmd.Connection = cnn;
             cmd.Connection.Open();
-            cmd.CommandText = "select g.ID,g.No_control,a.A_Paterno,a.A_Materno,a.Nombre,g.Cal1,g.Cal2,g.Cal3,g.Cal4,g.Cal5,g.Cal6,Comentarios, g.Entrevista1, g.Entrevista2, g.Entrevista3, g.Asistencia1, g.Asistencia2, g.Asistencia3,g.A,g.B,g.D,g.N,g.I,g.R,g.Promedio from " +
+            cmd.CommandText = "select g.ID,g.No_control,a.A_Paterno,a.A_Materno,a.Nombre,g.Cal1,g.Cal2,g.Cal3,g.Cal4,g.Cal5,g.Cal6,Comentarios, g.Entrevista1, g.Entrevista2, g.Entrevista3, g.Asistencia1, g.Asistencia2, g.Asistencia3,g.A,g.B,g.D,g.N,g.I,g.R,g.Promedio,a.Tutoria,a.Semestre SemestreA from " +
                 "Grupo_Compuesto g left join Alumno a on a.No_control = g.No_control where g.Estatus = 'En Curso' and g.ID_Grupo =" + idGrupo;
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public bool AlumnoAdd(int NoControl, string Nombre, string A_Paterno, string A_Materno, string Carrera)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "if(exists(select No_control from alumno where No_control =" + NoControl.ToString() + ")) BEGIN select 0 " +
+                "END ELSE BEGIN insert into alumno(No_control, Nombre,A_Paterno,A_Materno,carrera,semestre,tutoria,estatus) values("+ 
+                NoControl.ToString() + ",'" + Nombre + "','" + A_Paterno + "','" + A_Materno + "','" + Carrera + "',1,0,'NO ASIGNADO') select 1 END";
+            try
+            {
+                if (cmd.ExecuteScalar().ToString() == "1")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public bool AlumnoUpdate(int NoControl, string Nombre, string A_Paterno, string A_Materno)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "update alumno set nombre='" + Nombre + "',a_paterno='" + A_Paterno + "',a_materno='" + A_Materno + 
+                "' where No_control =" + NoControl.ToString() ;
+            try
+            {
+                cmd.ExecuteScalar();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public bool GrupoAddUpdate(int idGrupo, int Grado, int idMaestro, string Homoclave)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "declare @id int =" + idGrupo + ", @nombre varchar(20), @grado int="+ Grado + ", @idMaestro int=" + idMaestro +
+                "if (exists(select id from Grupo_Compuesto where ID_Grupo = @id )) select 'No se puede editar porque ya existen alumnos " +
+                "asignados' else BEGIN declare @val varchar(30) = (select '" + Homoclave + "' + substring(convert(varchar, current_timestamp, 103), 7, " +
+                "4) + (case when substring(convert(varchar, current_timestamp, 103), 5,2) < '8' then 'A' else 'B' end) +'-'+ cast(@grado " +
+                "as varchar)) set @nombre= @val + char(1 + ascii(isnull((select top 1 substring(nombre, 11, 1) from Grupo where Nombre " +
+                "like '%' + @val + '%' and ID <> @id and Estatus = 'ACTIVO' order by id desc), '@'))) if (exists(select id from grupo " +
+                "where id = @id)) BEGIN if (substring(isnull((select nombre from grupo where id = @id), ''), 11,1) <> SUBSTRING(@nombre, " +
+                "11, 1) and substring(isnull((select nombre from grupo where id=@id),''), 10,1) = SUBSTRING(@nombre, 10,1)) select @nombre= " +
+                "Nombre from grupo where id = @id update grupo set Nombre = @nombre, ID_Maestro = @idMaestro " +
+                "where id=@id END else insert into Grupo(Nombre, ID_Maestro, Estatus) values(@nombre, @idMaestro, 'ACTIVO') END" ;
+            try
+            {
+                cmd.ExecuteScalar();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable GruposSelect(string HomoClave)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "select g.ID,g.Nombre,m.Nombre_Maestro,m.A_Paterno,m.A_Materno from Grupo g left join Maestro m on g.ID_Maestro = m.ID " +
+                "where g.Estatus = 'ACTIVO' and g.Nombre like '%" + HomoClave + "%'";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable GruposSelect(string HomoClave, int Grade)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "select g.ID,g.Nombre,m.Nombre_Maestro,m.A_Paterno,m.A_Materno from Grupo g left join Maestro m on g.ID_Maestro = m.ID " +
+                "where g.Estatus = 'ACTIVO' and g.Nombre like '%" + HomoClave + "%' and g.Nombre like '%-" + Grade + "%'";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable MaestroGetGroups(int idMaestro)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "Select";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable AlumnosGetByCarrera(string carrera, string filtro)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "declare @filtro varchar(30) = '" + filtro + "' select No_control,A_Paterno,A_Materno,Nombre,Semestre,Estatus,Tutoria from alumno where Estatus = 'no asignado'" +
+                " and carrera ='" + carrera + "' and 1=(case when @filtro='' then 1 when cast(No_control as varchar) like '%' + @filtro + '%' " +
+                "then 1 when A_Paterno like '%' + @filtro + '%' then 1 when A_Materno like '%' + @filtro + '%' then 1 when nombre like '%' + @filtro " +
+                " + '%' then 1 when cast(Semestre as varchar) like '%' + @filtro + '%' then 1 when tutoria like '%' + @filtro + '%' then 1 " +
+                "else 0 end)";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        public DataTable AlumnosGetToAsign(string carrera, int GradoTutoria)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "select No_control,A_Paterno,A_Materno,Nombre,Semestre,Estatus,Tutoria from alumno where Estatus = 'no asignado'" +
+                " and carrera ='" + carrera + "' and tutoria =" + GradoTutoria;
             try
             {
                 dt = new DataTable();
@@ -775,8 +1086,7 @@ namespace TutoriasWeb
             cmd.CommandText = "declare @NoControl int =" + NoControl +" select(a.Nombre + a.A_Paterno + a.A_Materno) NombreAlumno, (m.Nombre_Maestro + m.A_Paterno + m.A_Materno)" +
                 " NombreMaestro, a.Carrera, a.Semestre, gc.Entrevista1, gc.Entrevista2, gc.Entrevista3, gc.Asistencia1, gc.Asistencia2," +
                 "gc.Asistencia3, gc.Comentarios from Grupo_Compuesto gc LEFT JOIN Grupo g on g.ID = gc.ID_Grupo LEFT JOIN Maestro m on  " +
-                "g.ID_Maestro = m.ID LEFT JOIN Alumno a on gc.No_control=a.No_control where gc.No_control=@NoControl and " +
-                "gc.Estatus='En Curso' ";
+                "g.ID_Maestro = m.ID LEFT JOIN Alumno a on gc.No_control=a.No_control where gc.No_control=@NoControl ";
             try
             {
                 dr = cmd.ExecuteReader();
@@ -912,8 +1222,11 @@ namespace TutoriasWeb
             cmd.Connection.Open();
             cmd.CommandText = " declare @idGrupo int =" + IdGrupo.ToString() +
             " select(case when substring(g.Nombre, 8, 1) = 'A' then 'ENE-JUN' else 'AGO-DIC' end) periodo ,(case when substring(g.Nombre,"
-            + "10,1) = '1' then 'Primer' when substring(g.Nombre, 10,1) = '2' then 'Segundo' else 'Tercer' end + ' semestre') semestre"	        
-	        + ",(select count(No_control) from Grupo_Compuesto where ID_Grupo = @idGrupo ) alumnosAsignados, ('Grupo ' + substring(g.Nombre, 10, 1) +" 
+            + "10,1) = '1' then 'Primer' when substring(g.Nombre, 10,1) = '2' then 'Segundo' else 'Tercer' end + ' semestre') semestre,"	
+            + "(select count(No_control) from Grupo_Compuesto where ID_Grupo = @idGrupo and A='SI' and B='SI' ) alumnosAtendidos,"
+            + "(select count(No_control) from Grupo_Compuesto where ID_Grupo = @idGrupo ) alumnosAsignados,(select Nombre_Maestro from maestro where"
+            + " id=g.ID_Maestro) + ' ' + (select a_paterno from maestro where id=g.ID_Maestro) + ' ' + (select a_materno from maestro where"
+            + " id=g.ID_Maestro) Tutor, a.Carrera, ('Grupo ' + substring(g.Nombre, 10, 1) +"
             + "'°' + SUBSTRING(g.Nombre, 8, 1)) grupo, Convert(varchar(10), CURRENT_TIMESTAMP, 103) fecha,(select count(Circulo_Estudio) from"
             + " Grupo_Compuesto where ID_Grupo = @idGrupo and Circulo_Estudio = 1) as circuloEstudio,(select count(Atencion_Medica) from Grupo_Compuesto " 
             +"where ID_Grupo = @idGrupo and Atencion_Medica = 1) as atencionMedica,(select count(Platicas) from Grupo_Compuesto where ID_Grupo = "
@@ -962,6 +1275,65 @@ namespace TutoriasWeb
             catch (Exception ex)
             {
                 return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+
+        public bool AdministradorDelete(int ID)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            tr = cmd.Connection.BeginTransaction();
+            cmd.Transaction = tr;
+            cmd.CommandText = "Delete from Administrador WHERE id =" + ID;
+            try
+            {
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    tr.Rollback();
+                    return true;
+                }
+                else
+                {
+                    tr.Commit();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+
+
+        public DataTable AdministradoresAdd(string Usuario, string Nombre, string aPaterno, string aMaterno, string Carrera, int id)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = " declare @Carrera varchar(30) ='" + Carrera + "', @Nombre varchar(30)='" + Nombre + "',@A_Paterno varchar(30)='" + aPaterno +
+                "',@A_Materno varchar(30)='" + aMaterno + "', @Usuario varchar(30)='" + Usuario + "', @id int =" + id + " if (exists(select id from Administrador where Carrera = " +
+                "@Carrera and id<>@id))  BEGIN select 0 result, 'Ya existe un administrador asignado a esta carrera!!' msg END else BEGIN if (exists(select id from " +
+                "Administrador where Usuario = @Usuario)) BEGIN update Administrador set Nombre = @Nombre, A_Paterno = @A_Paterno,A_Materno = @A_Materno," +
+                "Carrera = @Carrera where id= @id END else BEGIN insert into Administrador(Usuario, Nombre, A_Paterno, A_Materno, Clave, " +
+                "Carrera) values(@Usuario, @Nombre, @A_Paterno, @A_Materno, '', @Carrera) END select 1 result, '' msg END";
+            try
+            {
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
             finally
             {
@@ -1299,33 +1671,32 @@ namespace TutoriasWeb
 
                 gfx.DrawString("Informe Final Semestre ", subtitle, XBrushes.Black, new XRect(1, 190, page.Width-140, page.Height), XStringFormats.TopCenter);
                 gfx.DrawLine(XPens.Black, 415, 205, 495, 205);
-                gfx.DrawString("ENE-JUN", subtitle, XBrushes.Black, new XRect(425, 190, page.Width, page.Height), format);
-                gfx.DrawString("De " /*+ año*/, subtitle, XBrushes.Black, new XRect(500, 190, page.Width, page.Height), format);
-                gfx.DrawString("2022" /*+ año*/, subtitle, XBrushes.Black, new XRect(515, 190, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["periodo"].ToString(), subtitle, XBrushes.Black, new XRect(425, 190, page.Width, page.Height), format);
+                gfx.DrawString("De " + dt.Rows[0]["Fecha"].ToString().Substring(5,4), subtitle, XBrushes.Black, new XRect(500, 190, page.Width, page.Height), format);
 
                 gfx.DrawString("Situacion Académica de los alumnos de ", subtitle, XBrushes.Black, new XRect(120, 210, page.Width - 140, page.Height), format);
                 gfx.DrawLine(XPens.Black, 325, 225, 420, 225);
-                gfx.DrawString("Primer semestre", subtitle, XBrushes.Black, new XRect(330, 210, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["semestre"].ToString(), subtitle, XBrushes.Black, new XRect(330, 210, page.Width, page.Height), format);
                 gfx.DrawString("De tutorias de la carrera de  ", subtitle, XBrushes.Black, new XRect(425, 210, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 570, 225, 730, 225);
-                gfx.DrawString("Ingenieria industrial", subtitle, XBrushes.Black, new XRect(570, 210, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["carrera"].ToString(), subtitle, XBrushes.Black, new XRect(570, 210, page.Width, page.Height), format);
 
                 gfx.DrawString("Nombre De Tutor.", title, XBrushes.Black, new XRect(70, 240, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 175, 255, 430, 255);
-                gfx.DrawString("Angie Johana Zamora López", subtitle, XBrushes.Black, new XRect(185, 240, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["Tutor"].ToString(), subtitle, XBrushes.Black, new XRect(185, 240, page.Width, page.Height), format);
                 gfx.DrawString("Fecha del informe", title, XBrushes.Black, new XRect(540, 240, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 640, 252, 755, 252);
-                gfx.DrawString("15/08/2022", txt, XBrushes.Black, new XRect(650, 240, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["Fecha"].ToString(), txt, XBrushes.Black, new XRect(650, 240, page.Width, page.Height), format);
 
                 gfx.DrawString("No. de alumnos asignados.", subtitle, XBrushes.Black, new XRect(70, 290, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 210, 305, 260, 305);
-                gfx.DrawString("38", txt, XBrushes.Black, new XRect(220, 290, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["alumnosAsignados"].ToString(), txt, XBrushes.Black, new XRect(220, 290, page.Width, page.Height), format);
                 gfx.DrawString("No. de alumnos Atendidos.", subtitle, XBrushes.Black, new XRect(350, 290, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 495, 305, 545, 305);
-                gfx.DrawString("36", txt, XBrushes.Black, new XRect(510, 290, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["alumnosAtendidos"].ToString(), txt, XBrushes.Black, new XRect(510, 290, page.Width, page.Height), format);
                 gfx.DrawString("Semestre.", subtitle, XBrushes.Black, new XRect(630, 290, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 685, 305, 750, 305);
-                gfx.DrawString("Grupo 1°C", txt, XBrushes.Black, new XRect(690, 290, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["grupo"].ToString(), txt, XBrushes.Black, new XRect(690, 290, page.Width, page.Height), format);
 
                 gfx.DrawString("1.-Resultados Especificos", title, XBrushes.Black, new XRect(70, 330, page.Width, page.Height), format);
                 gfx.DrawLine(XPens.Black, 70, 345, 210, 345);
@@ -1347,6 +1718,12 @@ namespace TutoriasWeb
                 gfx.DrawString("Platicas o conferencias", txt, XBrushes.Black, new XRect(80, 435, page.Width, page.Height), format);
                 gfx.DrawString("Atencion Psicológica", txt, XBrushes.Black, new XRect(80, 455, page.Width, page.Height), format);
                 gfx.DrawString("Servicio de apoyo externo", txt, XBrushes.Black, new XRect(80, 475, page.Width, page.Height), format);
+
+                gfx.DrawString(dt.Rows[0]["circuloEstudio"].ToString(), txt, XBrushes.Black, new XRect(335, 395, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["atencionMedica"].ToString(), txt, XBrushes.Black, new XRect(335, 415, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["platicas"].ToString(), txt, XBrushes.Black, new XRect(335, 435, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["psicologica"].ToString(), txt, XBrushes.Black, new XRect(335, 455, page.Width, page.Height), format);
+                gfx.DrawString(dt.Rows[0]["apoyoExterno"].ToString(), txt, XBrushes.Black, new XRect(335, 475, page.Width, page.Height), format);
 
                 page = document.AddPage();
                 page.Orientation = PdfSharp.PageOrientation.Landscape;
@@ -1410,7 +1787,7 @@ namespace TutoriasWeb
                 gfx.DrawString(dt.Rows[0]["Entrevista3"].ToString().Substring(0,10), txt3, XBrushes.Black, new XRect(412, 160, page.Width, page.Height), format);
 
                 dt =mt.Reporte5GetInfo(idGrupo);
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     gfx.DrawString((i+1).ToString(), txt1, XBrushes.Black, new XRect(58, x + 5, page.Width, page.Height), format);
                     gfx.DrawString(dt.Rows[0]["No_control"].ToString(), txt1, XBrushes.Black, new XRect(77, x + 5, page.Width, page.Height), format);

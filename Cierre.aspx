@@ -34,11 +34,7 @@
             <div class=" col-6 form-inline justify-content-around">
                 <asp:DropDownList ID="grupo" runat="server" CssClass="form-control" OnSelectedIndexChanged="grupo_SelectedIndexChanged" AutoPostBack="true" /> 
             </div>
-        </div>
-
-        <div class="col-12"style="margin-bottom:10px;">
-            <asp:Button Text="Calcular Datos" runat="server" ID="btnCalcular" CssClass="btn btn-primary" OnClick="btnCalcular_Click" Visible="false" />
-        </div>
+        </div>        
 
         <div class="row col-12 justify-content-start">
             

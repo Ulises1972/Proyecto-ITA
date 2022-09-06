@@ -20,15 +20,13 @@
         <div class="row col-12 justify-content-start">
             
 
-            <asp:GridView ID="GridView1" Visible="false" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
                 <Columns>
                     <asp:BoundField DataField="No_control" HeaderText="No. Control" />
                     <asp:BoundField DataField="A_Paterno" HeaderText="Apellido Paterno" />
                     <asp:BoundField DataField="A_Materno" HeaderText="Apellido Materno" />
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre(s)" />
                     <asp:BoundField DataField="Semestre" HeaderText="Semestre" />
-                    <asp:BoundField DataField="Carrera" HeaderText="Carrera" />
-                    <asp:BoundField DataField="Tutoria" HeaderText="Tutoria" />
                     <asp:TemplateField ShowHeader="false">
                         <ItemTemplate>
                             <asp:CheckBox ID="checkBox" runat="server" />

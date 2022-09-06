@@ -24,9 +24,9 @@
         <button type="button" class="btn btn-primary" id="btn_m">Agregar</button>
 
         <div class="row col-12 justify-content-start">
-            <asp:GridView ID="GridView1" runat="server" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
+            <asp:GridView ID="GridView1" runat="server" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" 
+                AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover " DataKeyNames="ID"  >
                 <Columns>
-                    <asp:BoundField DataField="ID" HeaderText="ID" Visible="false"/>
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre de la materia" />
                     <asp:BoundField DataField="Nombre_Corto" HeaderText="Clave de la materia" />
                     <asp:BoundField DataField="Semestre" HeaderText="Semestre" />

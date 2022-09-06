@@ -67,6 +67,11 @@ namespace TutoriasWeb
 
         protected void Btn_addInst_Click(object sender, EventArgs e)
         {
+            if(nombre.Text.Replace(" ","") == "" || logo.Text.Replace(" ","") == "" || sitio.Text.Replace(" ","") == "")
+            {
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Debe llenar todos los campos'); ", true);
+                return;
+            }
             if(Btn_addInst.Text == "Agregar")
             {
                 ta.Insert(nombre.Text.ToUpper().Replace("  ", ""), logo.Text, sitio.Text);

@@ -35,12 +35,12 @@
                     <%--<asp:BoundField DataField="Asistencia1" HeaderText="Entrevista1 " />
                     <asp:BoundField DataField="Asistencia2" HeaderText="Entrevista2 " />
                     <asp:BoundField DataField="Asistencia3" HeaderText="Entrevista3 " />--%>
-                    <asp:BoundField DataField="Cal1"  />
-                    <asp:BoundField DataField="Cal2"  />
-                    <asp:BoundField DataField="Cal3"  />
-                    <asp:BoundField DataField="Cal4"  />
-                    <asp:BoundField DataField="Cal5" />
-                    <asp:BoundField DataField="Cal6" />
+                    <asp:BoundField DataField="Cal1" HeaderText="Cal1" />
+                    <asp:BoundField DataField="Cal2" HeaderText="Cal2"  />
+                    <asp:BoundField DataField="Cal3" HeaderText="Cal3"  />
+                    <asp:BoundField DataField="Cal4" HeaderText="Cal4"  />
+                    <asp:BoundField DataField="Cal5" HeaderText="Cal5" />
+                    <asp:BoundField DataField="Cal6" HeaderText="Cal6" />
                     <asp:BoundField DataField="Comentarios" HeaderText="OBSERVACIONES" /> 
                     
                     <asp:TemplateField ShowHeader="false">
