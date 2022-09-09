@@ -102,7 +102,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <asp:Button Text="Cancelar" runat="server" ID="Btn_cancel" OnClick="Btn_cancel_Click" CssClass="btn btn-primary" Width="200" />
-                    <asp:Button Text="Agregar" ID="Btn_actualizar" OnClick="Btn_actualizar_Click" runat="server" CssClass="btn btn-primary" Width="200" />
+                    <asp:Button Text="Actualizar" ID="Btn_actualizar" OnClick="Btn_actualizar_Click" runat="server" CssClass="btn btn-primary" Width="200" />
                 </div>
 
             </div>

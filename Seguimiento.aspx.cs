@@ -100,6 +100,18 @@ namespace TutoriasWeb
         {
             if (e.CommandName == "Editar")
             {
+                lbl1.Visible = false;
+                lbl2.Visible = false;
+                lbl3.Visible = false;
+                lbl4.Visible = false;
+                lbl5.Visible = false;
+                lbl6.Visible = false;
+                cal1.Visible = false;
+                cal2.Visible = false;
+                cal3.Visible = false;
+                cal4.Visible = false;
+                cal5.Visible = false;
+                cal6.Visible = false;
 
                 control.Text = e.CommandArgument.ToString();
                 //dt = ta.GetDataByID(Convert.ToInt32(e.CommandArgument));
@@ -122,12 +134,42 @@ namespace TutoriasWeb
 
                 t = mt.AlumnoGetCalsBySem(Metodos.toInt(control.Text), 0);
 
-                lbl1.InnerText = t.Rows[0]["Nombre_Corto"].ToString();
-                lbl2.InnerText = t.Rows[1]["Nombre_Corto"].ToString();
-                lbl3.InnerText = t.Rows[2]["Nombre_Corto"].ToString();
-                lbl4.InnerText = t.Rows[3]["Nombre_Corto"].ToString();
-                lbl5.InnerText = t.Rows[4]["Nombre_Corto"].ToString();
-                lbl6.InnerText = t.Rows[5]["Nombre_Corto"].ToString();
+                if(t.Rows.Count > 0)
+                {
+                    lbl1.InnerText = t.Rows[0]["Nombre_Corto"].ToString();
+                    lbl1.Visible = true;
+                    cal1.Visible = true;
+                }
+                if (t.Rows.Count > 1)
+                {
+                    lbl2.InnerText = t.Rows[1]["Nombre_Corto"].ToString();
+                    lbl2.Visible = true;
+                    cal2.Visible = true;
+                }
+                if (t.Rows.Count > 2)
+                {
+                    lbl3.InnerText = t.Rows[2]["Nombre_Corto"].ToString();
+                    lbl3.Visible = true;
+                    cal3.Visible = true;
+                }
+                if (t.Rows.Count > 3)
+                {
+                    lbl4.InnerText = t.Rows[3]["Nombre_Corto"].ToString();
+                    lbl4.Visible = true;
+                    cal4.Visible = true;
+                }
+                if (t.Rows.Count > 4)
+                {
+                    lbl5.InnerText = t.Rows[4]["Nombre_Corto"].ToString();
+                    lbl5.Visible = true;
+                    cal5.Visible = true;
+                }
+                if (t.Rows.Count > 5)
+                {
+                    lbl6.InnerText = t.Rows[5]["Nombre_Corto"].ToString();
+                    lbl6.Visible = true;
+                    cal6.Visible = true;
+                }
 
                 ScriptManager.RegisterClientScriptBlock(this, GetType(), "modal", "openModal();", true);
             }
@@ -135,7 +177,7 @@ namespace TutoriasWeb
 
         protected void Btn_actualizar_Click(object sender, EventArgs e)
         {
-            if(mt.GrupoComUpdateSeguimiento(cal1.Text, cal2.Text, cal3.Text, cal4.Text, cal5.Text, cal6.Text, Metodos.toInt(control.Text)))
+            if(mt.GrupoComUpdateSeguimiento(cal1.Visible ? cal1.Text : "null", cal2.Visible ? cal2.Text : "null", cal3.Visible ? cal3.Text : "null", cal4.Visible ? cal4.Text : "null", cal5.Visible ? cal5.Text : "null", cal6.Visible ? cal6.Text : "null", Metodos.toInt(control.Text)))
                 ScriptManager.RegisterClientScriptBlock(this, GetType(), "modal", "alert('Error. Intenta de nuevo o contacta a soporte');", true);
             cleanModal();
             actualiza();

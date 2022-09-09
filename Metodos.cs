@@ -126,8 +126,10 @@ namespace TutoriasWeb
             cmd.Connection.Open();
             tr = cmd.Connection.BeginTransaction();
             cmd.Transaction = tr;
-            cmd.CommandText = "UPDATE Grupo_Compuesto SET Cal1='" + cal1 + "', Cal2='" + cal2 + "', Cal3='" + cal3 + "', Cal4='" + cal4 + 
-                                "', Cal5='" + cal5 + "', Cal6='" + cal6 + "' where No_control=" + NoControl + " and Estatus='En Curso'";
+            cmd.CommandText = "declare @c1 varchar(10)='"+cal1+ "',@c2 varchar(10)='" + cal2 + "',@c3 varchar(10)='" + cal3 + "',@c4 varchar(10)='" + cal4 + "',@c5 varchar(10)='" + cal5 + "',@c6 varchar(10)='" + cal6 + "' "+
+                "UPDATE Grupo_Compuesto SET Cal1=case when @c1 = 'null' then null else @c1 end, Cal2=case when @c2 = 'null' then null else @c2 end, " +
+                "Cal3=case when @c3 = 'null' then null else @c3 end, Cal4=case when @c4 = 'null' then null else @c4 end, Cal5=case when @c5 = " +
+                "'null' then null else @c5 end, Cal6=case when @c6 = 'null' then null else @c6 end where No_control=" + NoControl + " and Estatus='En Curso'";
             try
             {
                 if (cmd.ExecuteNonQuery() != 1)
@@ -181,14 +183,14 @@ namespace TutoriasWeb
             }
         }
 
-        public bool GrupoComUpdateCalculos(int Promedio, string A, string B, string D, string N, string I, string R, string Id)
+        public bool GrupoComUpdateCalculos(string Promedio, string A, string B, string D, string N, string I, string R, string Id)
         {
             cmd.Connection = cnn;
             cmd.Connection.Open();
             tr = cmd.Connection.BeginTransaction();
             cmd.Transaction = tr;
             cmd.CommandText = "UPDATE Grupo_Compuesto SET A='" + A + "', B='" + B + "', D='" + D +
-                                "', N='" + N + "', I='" + I + "', R='" + R + "', Promedio=" + Promedio + " where ID=" + Id;
+                                "', N='" + N + "', I='" + I + "', R='" + R + "', Promedio='" + Promedio + "' where ID=" + Id;
             try
             {
                 if (cmd.ExecuteNonQuery() != 1)
@@ -367,6 +369,61 @@ namespace TutoriasWeb
             }
         }
 
+        public DataTable ReportesByAlumnos(string carrera, string filtro)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "declare @filtro varchar(50) = '"+ filtro +"', @carrera varchar(50)='" + carrera + "' select a.No_control, " +
+                "(a.Nombre + ' ' + a.A_Paterno + ' ' + a.A_Materno) Alumno,a.Semestre,a.Tutoria,case when a.Tutoria >=0 and a.Estatus =" +
+                "'en curso' then 1 when  a.Tutoria > 0 then 1 else 0 end btn1,case when a.Tutoria >=1 and a.Estatus='en curso' then 1 " +
+                "when a.Tutoria >1 then 1 else 0 end btn2,case when a.Tutoria >=2 and a.Estatus='en curso' then 1 when a.Tutoria >2 then" +
+                " 1 else 0 end btn3 from Alumno a where 1 = (case when @filtro = '' then 1 when cast(a.No_control as varchar) like '%' " +
+                "+ @filtro + '%' then 1 when(a.Nombre + ' ' + a.A_Paterno + ' ' + a.A_Materno) like '%' + @filtro + '%' then 1 when " +
+                "a.Semestre = @filtro then 1 when a.Tutoria = @filtro then 1 else 0 end) and a.Carrera = @carrera";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }        
+
+        public DataTable ReportesByGroup(int IDtutor, string filtro)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "declare @filtro varchar(50) = '"+ filtro +"', @tutor varchar(10)='"+ IDtutor + "'" +
+                "select* from(select g.id, g.Nombre, (m.A_Paterno +' ' + m.A_Materno + ' ' + m.Nombre_Maestro ) Tutor from Grupo g " +
+                "left join Maestro m on g.ID_Maestro = m.ID left join Grupo_Compuesto gc on gc.ID_Grupo = g.ID where g.Estatus <> " +
+                "'ELIMINADO' and 1 = (case when @filtro = '' then 1 when g.Nombre like '%' + @filtro + '%' then 1 when(m.Nombre_Maestro " +
+                "+ ' ' + m.A_Paterno + ' ' + m.A_Materno) like '%' + @filtro + '%' then 1 else 0 end) and 1 = (case when @tutor = '-1' " +
+                "then 1 when m.ID = cast(@tutor as int) then 1 else 0 end) ) a group by a.ID, a.Nombre, a.Tutor";
+            try
+            {
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+        
         public DataTable TutoresSelect(string Carrera, string filtro)
         {
             cmd.Connection = cnn;
@@ -493,11 +550,11 @@ namespace TutoriasWeb
             dt = AlumnoGetCalsBySem(NoControl, 0);
             if(dt.Rows.Count > 0)
             {
-                int[] promedio = new int[6];
+                int[] promedio = new int[dt.Rows.Count];
                 int cont;
                 int cal;
-                bool[] reprobada = new bool[6];
-                bool[] baja = new bool[6];
+                bool[] reprobada = new bool[dt.Rows.Count];
+                bool[] baja = new bool[dt.Rows.Count];
                 int op;
                 for(int i=0; i < dt.Rows.Count; i++)
                 {
@@ -553,12 +610,12 @@ namespace TutoriasWeb
                     res = reprobada[0] ? "NA" : promedio[0].ToString();
 
                 cmd.CommandText = "update Grupo_Compuesto set Cal1='" + res +"'";                
-                for (int k =1; k < 6; k++)
+                for (int k =1; k < dt.Rows.Count; k++)
                 {
                     if (baja[k])
                         res = "-";
                     else
-                        res = reprobada[k] ? "NA" : promedio[k].ToString();
+                        res = reprobada[k] ? "NA" : promedio[k].ToString() == "0" ? "" : promedio[k].ToString();
                     cmd.CommandText += ", Cal" + (k + 1) + "='" + res + "'";
                 }
                 cmd.CommandText += " where No_control =" + NoControl + " and Estatus='En Curso'";
@@ -842,7 +899,7 @@ namespace TutoriasWeb
         {
             cmd.Connection = cnn;
             cmd.Connection.Open();
-            cmd.CommandText = "select g.ID,g.No_control,a.A_Paterno,a.A_Materno,a.Nombre,g.Cal1,g.Cal2,g.Cal3,g.Cal4,g.Cal5,g.Cal6,Comentarios, g.Entrevista1, g.Entrevista2, g.Entrevista3, g.Asistencia1, g.Asistencia2, g.Asistencia3,g.A,g.B,g.D,g.N,g.I,g.R,g.Promedio,a.Tutoria,a.Semestre SemestreA from " +
+            cmd.CommandText = "select g.ID,g.No_control,a.A_Paterno,a.A_Materno,a.Nombre,case when g.Cal1 = '' then '/' else g.Cal1 end Cal1,case when g.Cal2 = '' then '/' else g.Cal2 end Cal2,case when g.Cal3 = '' then '/' else g.Cal3 end Cal3,case when g.Cal4 = '' then '/' else g.Cal4 end Cal4,case when g.Cal5 = '' then '/' else g.Cal5 end Cal5,case when g.Cal6 = '' then '/' else g.Cal6 end Cal6,Comentarios, g.Entrevista1, g.Entrevista2, g.Entrevista3, g.Asistencia1, g.Asistencia2, g.Asistencia3,g.A,g.B,g.D,g.N,g.I,g.R,g.Promedio,a.Tutoria,a.Semestre SemestreA from " +
                 "Grupo_Compuesto g left join Alumno a on a.No_control = g.No_control where g.Estatus = 'En Curso' and g.ID_Grupo =" + idGrupo;
             try
             {
@@ -1078,7 +1135,7 @@ namespace TutoriasWeb
                 cmd.Connection.Close();
             }
         }
-        public DataTable Reporte1GetInfo(int NoControl)//semestre sero para indicar semestre actual
+        public DataTable Reporte1GetInfo(int NoControl, int semestre)//semestre sero para indicar semestre actual
         {
             dt = new DataTable();
             cmd.Connection = cnn;
@@ -1086,7 +1143,7 @@ namespace TutoriasWeb
             cmd.CommandText = "declare @NoControl int =" + NoControl +" select(a.Nombre + a.A_Paterno + a.A_Materno) NombreAlumno, (m.Nombre_Maestro + m.A_Paterno + m.A_Materno)" +
                 " NombreMaestro, a.Carrera, a.Semestre, gc.Entrevista1, gc.Entrevista2, gc.Entrevista3, gc.Asistencia1, gc.Asistencia2," +
                 "gc.Asistencia3, gc.Comentarios from Grupo_Compuesto gc LEFT JOIN Grupo g on g.ID = gc.ID_Grupo LEFT JOIN Maestro m on  " +
-                "g.ID_Maestro = m.ID LEFT JOIN Alumno a on gc.No_control=a.No_control where gc.No_control=@NoControl ";
+                "g.ID_Maestro = m.ID LEFT JOIN Alumno a on gc.No_control=a.No_control where gc.No_control=@NoControl and gc.semestre =" + semestre;
             try
             {
                 dr = cmd.ExecuteReader();
@@ -1233,8 +1290,11 @@ namespace TutoriasWeb
             +"@idGrupo and Platicas = 1) as platicas,(select count(Psicologica) from Grupo_Compuesto where ID_Grupo = @idGrupo and Psicologica = 1) as " 
             +"psicologica,(select count(Apoyo_Externo) from Grupo_Compuesto where ID_Grupo = @idGrupo and Apoyo_Externo = 1) as apoyoExterno"
 	        + ",gc.No_control,(a.A_Paterno + ' ' + a.A_Materno + ' ' + a.Nombre) alumno,gc.Entrevista1,gc.Entrevista2,gc.Entrevista3,gc.Asistencia1" +
-            ",gc.Asistencia2,gc.Asistencia3,gc.A,gc.B,GC.Cal1,GC.Cal2,GC.Cal3,GC.Cal4,GC.Cal5,gc.Cal6,gc.promedio,gc.D,gc.N,gc.I,gc.R,gc.Comentarios "
-            + "from Grupo_Compuesto gc  left join grupo g on g.id = gc.id_grupo left join Alumno a on a.No_control = gc.No_control where gc.ID_Grupo = @idGrupo";
+            ",gc.Asistencia2,gc.Asistencia3,gc.A,gc.B,case when GC.Cal1 ='' then '/' else GC.Cal1 end Cal1,case when GC.Cal2 ='' then '/' " +
+            "else GC.Cal2 end Cal2,case when GC.Cal3 ='' then '/' else GC.Cal3 end Cal3,case when GC.Cal4 ='' then '/' else GC.Cal4 end " +
+            "Cal4,case when GC.Cal5 ='' then '/' else GC.Cal5 end Cal5,case when GC.Cal6 ='' then '/' else GC.Cal6 end Cal6," +
+            "gc.promedio,gc.D,gc.N,gc.I,gc.R,gc.Comentarios, g.Nombre NombreGrupo from Grupo_Compuesto gc  left join grupo g on g.id = " +
+            "gc.id_grupo left join Alumno a on a.No_control = gc.No_control where gc.ID_Grupo = @idGrupo";
 
             try
             {
@@ -1314,6 +1374,36 @@ namespace TutoriasWeb
         }
 
 
+        public bool AsignarAlumnos(int NoControl, int idGrupo)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            tr = cmd.Connection.BeginTransaction();
+            cmd.Transaction = tr;
+            cmd.CommandText = "insert into Grupo_Compuesto (No_control, ID_Grupo, semestre, Estatus) values(" + NoControl + "," + idGrupo + "," +
+                "(select Semestre from Alumno where No_control =" + NoControl + "),'En Curso')" ;
+            try
+            {
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    tr.Rollback();
+                    return true;
+                }
+                else
+                {
+                    tr.Commit();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
 
         public DataTable AdministradoresAdd(string Usuario, string Nombre, string aPaterno, string aMaterno, string Carrera, int id)
         {
@@ -1341,11 +1431,11 @@ namespace TutoriasWeb
             }
         }
 
-        public static void reporte3(int NoControl)
+        public static void reporte3(int NoControl, int semestre)
         {
             Metodos mt = new Metodos();
             DataTable dt, cals;
-            dt = mt.Reporte1GetInfo(NoControl);
+            dt = mt.Reporte1GetInfo(NoControl, semestre);
             if (dt.Rows.Count > 0)
             {
                 // Create a new PDF document
@@ -1516,18 +1606,18 @@ namespace TutoriasWeb
                 gfx.DrawLine(new XPen(XColor.FromArgb(0, 0, 0)), 100, 100, 100, 100);
 
                 // Save the document...
-                string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PDF\") +NoControl  + ".pdf";
+                string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PDF\") +NoControl  +"_S" + semestre + ".pdf";
                 document.Save(filename);
                 // ...and start a viewer.
                 Process.Start(filename);
             }
         }
 
-        public static void Reporte4a(int NoControl, int idGrupo)
+        public static void Reporte4a(int NoControl, int idGrupo, int semestre)
         {
             Metodos mt = new Metodos();
             DataTable dt, num;
-            dt = mt.Reporte1GetInfo(NoControl);
+            dt = mt.Reporte1GetInfo(NoControl, semestre);
             num = mt.Reporte4aGetInfo(idGrupo);
 
             if (dt.Rows.Count > 0)
@@ -1630,6 +1720,7 @@ namespace TutoriasWeb
 
             if (dt.Rows.Count > 0)
             {
+                string nombreGrupo = dt.Rows[0]["NombreGrupo"].ToString();
                 // Create a new PDF document
                 PdfDocument document = new PdfDocument();
 
@@ -1672,7 +1763,7 @@ namespace TutoriasWeb
                 gfx.DrawString("Informe Final Semestre ", subtitle, XBrushes.Black, new XRect(1, 190, page.Width-140, page.Height), XStringFormats.TopCenter);
                 gfx.DrawLine(XPens.Black, 415, 205, 495, 205);
                 gfx.DrawString(dt.Rows[0]["periodo"].ToString(), subtitle, XBrushes.Black, new XRect(425, 190, page.Width, page.Height), format);
-                gfx.DrawString("De " + dt.Rows[0]["Fecha"].ToString().Substring(5,4), subtitle, XBrushes.Black, new XRect(500, 190, page.Width, page.Height), format);
+                gfx.DrawString("De " + dt.Rows[0]["Fecha"].ToString().Substring(6,4), subtitle, XBrushes.Black, new XRect(500, 190, page.Width, page.Height), format);
 
                 gfx.DrawString("Situacion Académica de los alumnos de ", subtitle, XBrushes.Black, new XRect(120, 210, page.Width - 140, page.Height), format);
                 gfx.DrawLine(XPens.Black, 325, 225, 420, 225);
@@ -1790,25 +1881,25 @@ namespace TutoriasWeb
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     gfx.DrawString((i+1).ToString(), txt1, XBrushes.Black, new XRect(58, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["No_control"].ToString(), txt1, XBrushes.Black, new XRect(77, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["alumno"].ToString(), txt2, XBrushes.Black, new XRect(130, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Asistencia1"].ToString(), txt1, XBrushes.Black, new XRect(350, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Asistencia2"].ToString(), txt1, XBrushes.Black, new XRect(390, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Asistencia3"].ToString(), txt1, XBrushes.Black, new XRect(430, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["A"].ToString(), txt1, XBrushes.Black, new XRect(455, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["B"].ToString(), txt1, XBrushes.Black, new XRect(470, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal1"].ToString(), txt1, XBrushes.Black, new XRect(483, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal2"].ToString(), txt1, XBrushes.Black, new XRect(505, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal3"].ToString(), txt1, XBrushes.Black, new XRect(527, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal4"].ToString(), txt1, XBrushes.Black, new XRect(549, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal5"].ToString(), txt1, XBrushes.Black, new XRect(571, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Cal6"].ToString(), txt1, XBrushes.Black, new XRect(593, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["promedio"].ToString(), txt1, XBrushes.Black, new XRect(616, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["D"].ToString(), txt, XBrushes.Black, new XRect(638, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["N"].ToString(), txt, XBrushes.Black, new XRect(653, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["I"].ToString(), txt, XBrushes.Black, new XRect(668, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["R"].ToString(), txt, XBrushes.Black, new XRect(683, x + 5, page.Width, page.Height), format);
-                    gfx.DrawString(dt.Rows[0]["Comentarios"].ToString(), txt1, XBrushes.Black, new XRect(697, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["No_control"].ToString(), txt1, XBrushes.Black, new XRect(77, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["alumno"].ToString(), txt2, XBrushes.Black, new XRect(130, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Asistencia1"].ToString() == "A" ? dt.Rows[i]["Asistencia1"].ToString() : "X", txt1, XBrushes.Black, new XRect(350, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Asistencia2"].ToString() == "A" ? dt.Rows[i]["Asistencia2"].ToString() : "X", txt1, XBrushes.Black, new XRect(390, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Asistencia3"].ToString() == "A" ? dt.Rows[i]["Asistencia3"].ToString() : "X", txt1, XBrushes.Black, new XRect(430, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["A"].ToString(), txt1, XBrushes.Black, new XRect(451, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["B"].ToString(), txt1, XBrushes.Black, new XRect(466, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal1"].ToString(), txt1, XBrushes.Black, new XRect(483, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal2"].ToString(), txt1, XBrushes.Black, new XRect(505, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal3"].ToString(), txt1, XBrushes.Black, new XRect(527, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal4"].ToString(), txt1, XBrushes.Black, new XRect(549, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal5"].ToString(), txt1, XBrushes.Black, new XRect(571, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Cal6"].ToString(), txt1, XBrushes.Black, new XRect(593, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["promedio"].ToString(), txt1, XBrushes.Black, new XRect(616, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["D"].ToString(), txt, XBrushes.Black, new XRect(638, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["N"].ToString(), txt, XBrushes.Black, new XRect(653, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["I"].ToString(), txt, XBrushes.Black, new XRect(668, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["R"].ToString(), txt, XBrushes.Black, new XRect(683, x + 5, page.Width, page.Height), format);
+                    gfx.DrawString(dt.Rows[i]["Comentarios"].ToString(), txt1, XBrushes.Black, new XRect(697, x + 5, page.Width, page.Height), format);
                     x += 20;
                     gfx.DrawLine(XPens.Black, 55, x, 795, x);//horizontalDinamica
                 }
@@ -1841,7 +1932,7 @@ namespace TutoriasWeb
 
 
                 // Save the document...
-                string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PDF\G_") + idGrupo + ".pdf";
+                string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PDF\") + nombreGrupo + ".pdf";
                 document.Save(filename);
                 // ...and start a viewer.
                 Process.Start(filename);

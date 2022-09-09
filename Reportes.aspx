@@ -40,19 +40,30 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
     <asp:label runat="server" id="lbl_name"></asp:label>
-    
+    <div class="row col-10 justify-content-center" style="margin-bottom:35px; margin-top:15px;" runat="server" id="divBuscar" visible="false">
+        <div class=" col-6 form-inline justify-content-around">
+            <asp:TextBox runat="server" ID="txtFiltro" CssClass="form-control" Width="400" AutoCompleteType="Disabled"></asp:TextBox>
+            <asp:Button runat="server" Text="btnBuscar" ID="Btn_buscar" OnClick="Btn_buscar_Click" CssClass="btn btn-primary" Width="100" />
+        </div>
+                
+    </div>
 
     <div class="row col-lg-12 form-inline">
         <div class="row col-4 justify-content-around" style="margin-top:20px; margin-left:15px;">
-            <asp:DropDownList runat="server" ID="reportes" CssClass="form-control" OnSelectedIndexChanged="reportes_SelectedIndexChanged" AutoPostBack="true">
+            <%--<asp:DropDownList runat="server" ID="reportes" CssClass="form-control" OnSelectedIndexChanged="reportes_SelectedIndexChanged" AutoPostBack="true">
                 <asp:ListItem Text="Seleccione tipo de reporte" />
                 <asp:ListItem Text="Reportes de seguimiento" Value=""/>
                 <asp:ListItem Text="Reportes concluido" Value="CONCLUIDO"/>
                 <asp:ListItem Text="Reportes Resagados/Reprobados" Value="RESAGADOS"/>
                 <asp:ListItem Text="Reportes liberados" Value="LIBERADOS"/>
                 <asp:ListItem Text="Reporte individual" />
+            </asp:DropDownList>--%>
+            <asp:DropDownList runat="server" ID="reportes" CssClass="form-control" OnSelectedIndexChanged="reportes_SelectedIndexChanged" AutoPostBack="true">
+                <asp:ListItem Text="Seleccione tipo de reporte" />
+                <asp:ListItem Text="Reportes Por Alumno" Value="Alumno"/>
+                <asp:ListItem Text="Reportes Por Grupo" Value="Grupo"/>
             </asp:DropDownList>
-            <asp:Button runat="server" CssClass="btn btn-primary" id="consultar" Text="Consultar" OnClick="consultar_Click"/>
+            <%--<asp:Button runat="server" CssClass="btn btn-primary" id="consultar" Text="Consultar" OnClick="consultar_Click"/>--%>
         </div>
         <div class="row col-8 justify-content-start" style="margin-top:20px;">
             <div class="row col-10 form-inline justify-content-around" runat="server" id="m_buscar" visible="false">
@@ -63,6 +74,46 @@
                 
         </div>
 
+        <div class="row col-12 justify-content-start" >
+            <asp:GridView runat="server" ID="gvGrupos" Visible="false" AutoGenerateColumns="false" DataKeyNames="ID"
+                CssClass="table table-bordered table-condensed table-responsive table-hover " OnRowCommand="gvGrupos_RowCommand" >
+                <Columns>
+                    <asp:BoundField DataField="Nombre" HeaderText="Grupo" />
+                    <asp:BoundField DataField="Tutor" HeaderText="Tutor asignado" />
+                    <asp:TemplateField HeaderText="Reporte">
+                        <ItemTemplate>
+                            <asp:ImageButton  runat="server" CommandArgument='<%# Eval("ID")%>' Width="40px" Height="40px" ImageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0V_CEV_mbCNMxIyQtr7x0h34Hte4xYK1Vbg&usqp=CAU" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+        </div>
+        <div class="row col-12 justify-content-start" >
+            <asp:GridView runat="server" ID="gvAlumnos" Visible="false" AutoGenerateColumns="false" DataKeyNames="No_control"
+                CssClass="table table-bordered table-condensed table-responsive table-hover " OnRowCommand="gvAlumnos_RowCommand" >
+                <Columns>
+                    <asp:BoundField DataField="No_control" HeaderText="No. Control" />
+                    <asp:BoundField DataField="Alumno" HeaderText="Nombre Alumno" />
+                    <asp:BoundField DataField="Semestre" HeaderText="Semestre" />
+                    <asp:BoundField DataField="Tutoria" HeaderText="Tutorias finalizadas" />
+                    <asp:TemplateField HeaderText="Reporte 1">
+                        <ItemTemplate>
+                            <asp:ImageButton  runat="server" Visible='<%# Convert.ToBoolean(Eval("btn1")) %>' Width="40px" Height="40px" CommandArgument='<%# Eval("No_control")%>' CommandName="r1" ImageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0V_CEV_mbCNMxIyQtr7x0h34Hte4xYK1Vbg&usqp=CAU" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Reporte 2">
+                        <ItemTemplate>
+                            <asp:ImageButton  runat="server" Visible='<%# Convert.ToBoolean(Eval("btn2")) %>' Width="40px" Height="40px" CommandArgument='<%# Eval("No_control")%>' CommandName="r2" ImageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0V_CEV_mbCNMxIyQtr7x0h34Hte4xYK1Vbg&usqp=CAU" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Reporte 3">
+                        <ItemTemplate>
+                            <asp:ImageButton  runat="server" Visible='<%# Convert.ToBoolean(Eval("btn3")) %>' Width="40px" Height="40px" CommandArgument='<%# Eval("No_control")%>' CommandName="r3" ImageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0V_CEV_mbCNMxIyQtr7x0h34Hte4xYK1Vbg&usqp=CAU" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+        </div>
         <div class="row col-12 justify-content-start">
             <asp:GridView ID="GridView1" runat="server" Visible="false" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
                 <Columns>

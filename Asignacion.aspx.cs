@@ -78,7 +78,8 @@ namespace TutoriasWeb
                         CheckBox chkRow = (GridView1.Rows[i].Cells[5].FindControl("checkBox") as CheckBox);
                         if (chkRow.Checked)
                         {
-                            tagc.Insert1(Convert.ToInt32(g_grupo.SelectedValue.ToString()), Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
+                            mt.AsignarAlumnos(Convert.ToInt32(GridView1.Rows[i].Cells[0].Text), Convert.ToInt32(g_grupo.SelectedValue.ToString()));
+                            //tagc.Insert1(Convert.ToInt32(g_grupo.SelectedValue.ToString()), Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
                             ta.UpdateStatus("En Curso", Convert.ToInt32(GridView1.Rows[i].Cells[0].Text));
                         }
                     }

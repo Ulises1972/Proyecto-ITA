@@ -57,14 +57,12 @@ namespace TutoriasWeb
             {
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
-                GridView1.UseAccessibleHeader = true;
-                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
             }
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.Rows[e.RowIndex].Cells[0].Text));
+            ta.UpdateStatus("ELIMINADO", Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value.ToString()));
             actualizar();
         }
 

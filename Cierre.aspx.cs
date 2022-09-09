@@ -52,11 +52,11 @@ namespace TutoriasWeb
 
         private void calculos()
         {            
-            t = mt.GrupoComGetDataByGroup(grupo.SelectedValue);
+            t = mt.GrupoCom_AlumnoGetDataByGroup(grupo.SelectedValue);
             if (t.Rows.Count > 0)
             {
-                string A, B, D, N, I, R;
-                int P, reprobadas;
+                string A, B, D, N, I, R, prom="";
+                int P, reprobadas, mat;
                 for(int i = 0; i < t.Rows.Count; i++)
                 {
                     D = "";
@@ -64,21 +64,29 @@ namespace TutoriasWeb
                     I = "";
                     R = "";
                     P = 0;
+                    mat = 0;
+                    prom = "";
                     reprobadas = 0;
                     for(int j=0; j<6; j++)
                     {
-                        if (t.Rows[i]["Cal" +(j+1)].ToString() == "NA" || t.Rows[i]["Cal" + (j + 1)].ToString() == "-")
-                            reprobadas++;     
-                        else if(!string.IsNullOrEmpty(t.Rows[i]["Cal" + (j + 1)].ToString()))
+                        if (t.Rows[i]["Cal" + (j + 1)].ToString() == "NA" || t.Rows[i]["Cal" + (j + 1)].ToString() == "-" || t.Rows[i]["Cal" + (j + 1)].ToString() == "/")
+                        {
+                            prom = t.Rows[i]["Cal" + (j + 1)].ToString() == "" ? "NA" : t.Rows[i]["Cal" + (j + 1)].ToString();
+                            reprobadas++;
+                        }
+                        else if (!string.IsNullOrEmpty(t.Rows[i]["Cal" + (j + 1)].ToString()) && prom == "")
                         {
                             P += Metodos.toInt(t.Rows[i]["Cal" + (j + 1)].ToString());
+                            mat++;
                         }
                     }
                     
                     A = t.Rows[i].ItemArray[15].ToString() == "A" && t.Rows[i].ItemArray[16].ToString() == "A" && t.Rows[i].ItemArray[17].ToString() == "A" ? "SI" : "NO";
                     B = reprobadas == 0 ? "SI" : "NO";
-                    P /= 6;
-                    if (P > 90)
+                    
+                    P /= mat;
+
+                    if (P >= 90)
                         D = "X";
                     else if (B == "SI")
                         N = "X";
@@ -88,7 +96,7 @@ namespace TutoriasWeb
                         R = "X";
                     
 
-                    if (mt.GrupoComUpdateCalculos(P, A, B, D, N, I, R, t.Rows[i].ItemArray[0].ToString()))
+                    if (mt.GrupoComUpdateCalculos(prom == "" ? P.ToString() : prom, A, B, D, N, I, R, t.Rows[i].ItemArray[0].ToString()))
                     {
                         ScriptManager.RegisterClientScriptBlock(this, GetType(), "modal", "alert('Error al calcular datos. Contacte a Soporte');", true);
                         return;
@@ -106,10 +114,10 @@ namespace TutoriasWeb
             {
                 if (grupo.SelectedIndex != 0)
                 {
+                    calculos();
                     t = mt.GrupoCom_AlumnoGetDataByGroup(grupo.SelectedValue);
                     if (t.Rows.Count > 0)
                     {
-                        calculos();
                         GridView1.DataSource = t;
                         GridView1.DataBind();
                         GridView1.UseAccessibleHeader = true;
@@ -201,11 +209,11 @@ namespace TutoriasWeb
                     mt.GrupoComUpdateSemestre(Semestre, resultado, t.Rows[i]["ID"].ToString());
                     mt.AlumnoCierreUpdate(Estatus, ++Semestre, Tutoria, t.Rows[i]["No_control"].ToString());
                     //reportes
-                    Metodos.reporte3(Metodos.toInt(t.Rows[i]["No_control"].ToString()));
+                   // Metodos.reporte3(Metodos.toInt(t.Rows[i]["No_control"].ToString()));
 
                 }
-                Metodos.Reporte4a(Metodos.toInt(t.Rows[0]["No_control"].ToString()), Metodos.toInt(grupo.SelectedValue));
-                Metodos.Reporte5(Metodos.toInt(grupo.SelectedValue));
+                //Metodos.Reporte4a(Metodos.toInt(t.Rows[0]["No_control"].ToString()), Metodos.toInt(grupo.SelectedValue));
+                //Metodos.Reporte5(Metodos.toInt(grupo.SelectedValue));
 
                 if (Convert.ToInt32(tagc.Concluido(Convert.ToInt32(grupo.SelectedValue))) < 1)
                 {

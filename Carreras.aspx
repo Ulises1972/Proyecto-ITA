@@ -26,9 +26,9 @@
         <button type="button" class="btn btn-primary" id="btn_m">Agregar</button>
 
         <div class="row col-12 justify-content-start">
-            <asp:GridView ID="GridView1" runat="server" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover "  >
+            <asp:GridView ID="GridView1" runat="server" OnRowDeleting="GridView1_RowDeleting" OnRowCommand="GridView1_RowCommand" 
+                AutoGenerateColumns="false" CssClass="table table-bordered table-condensed table-responsive table-hover " DataKeyNames="ID" >
                 <Columns>
-                    <asp:BoundField DataField="ID" HeaderText="ID" />
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
                     <asp:BoundField DataField="Omoclave" HeaderText="Clave" />
                     <asp:TemplateField ShowHeader="false">
@@ -73,7 +73,7 @@
                               <asp:TextBox ID="ca_nombre" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
                           </div>
                           <div>
-                              <label>Logo</label>
+                              <label>Logo (URL)</label>
                               <asp:TextBox ID="ca_logo" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
                           </div>
                           <div>

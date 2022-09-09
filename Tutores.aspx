@@ -91,7 +91,7 @@
                           <div>
                               <asp:Label ID="ID" Text="" runat="server" Visible="false"/>
                               <label>RFC</label>
-                              <asp:TextBox ID="tu_rfc" runat="server" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" />
+                              <asp:TextBox ID="tu_rfc" runat="server" CssClass="form-control text-uppercase" MaxLength="13" AutoCompleteType="Disabled" />
                           </div>
                           <div>
                               <label>Nombres</label>

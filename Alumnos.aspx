@@ -99,7 +99,7 @@
                               <asp:FileUpload runat="server" />--%>
                           <div style="margin-top:10px;">
                               <label>No de control</label>
-                              <asp:TextBox runat="server" ID="al_id" CssClass="form-control text-uppercase" AutoCompleteType="Disabled"  TextMode="Number" />
+                              <asp:TextBox runat="server" ID="al_id" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" MaxLength="8" TextMode="Number" />
                           </div>
                           <div style="margin-top:10px;">
                               <label>Nombre</label>
