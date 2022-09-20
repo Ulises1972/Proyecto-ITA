@@ -73,3 +73,10 @@ C:\Users\user1\Documents\TutoriasWeb\bin\CrystalDecisions.ReportAppServer.Common
 C:\Users\user1\Documents\TutoriasWeb\bin\CrystalDecisions.ReportAppServer.ObjectFactory.dll
 C:\Users\user1\Documents\TutoriasWeb\bin\CrystalDecisions.ReportAppServer.CommonControls.dll
 C:\Users\user1\Documents\TutoriasWeb\bin\stdole.dll
+C:\Users\user1\Documents\TutoriasWeb\bin\DocumentFormat.OpenXml.dll
+C:\Users\user1\Documents\TutoriasWeb\bin\SpreadsheetLight.dll
+C:\Users\user1\Documents\TutoriasWeb\bin\System.Drawing.Common.dll
+C:\Users\user1\Documents\TutoriasWeb\bin\System.IO.Packaging.dll
+C:\Users\user1\Documents\TutoriasWeb\bin\DocumentFormat.OpenXml.xml
+C:\Users\user1\Documents\TutoriasWeb\bin\SpreadsheetLight.xml
+C:\Users\user1\Documents\TutoriasWeb\bin\System.IO.Packaging.xml

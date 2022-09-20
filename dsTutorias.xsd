@@ -710,7 +710,7 @@ WHERE ID=@ID_Grupo</CommandText>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT        Alumno.No_control, Alumno.Nombre, Alumno.A_Paterno, Alumno.A_Materno, Alumno.Semestre, Alumno.Tutoria, Grupo_Compuesto.Cal1, Grupo_Compuesto.Cal2, Grupo_Compuesto.Cal3, Grupo_Compuesto.Cal4, 
                          Grupo_Compuesto.Cal5, Grupo_Compuesto.Cal6, Grupo_Compuesto.Entrevista1, Grupo_Compuesto.Entrevista2, Grupo_Compuesto.Entrevista3, Grupo_Compuesto.Comentarios, Grupo_Compuesto.ID, 
-                         Grupo_Compuesto.Semestre AS Sem, Grupo_Compuesto.Asistencia1, Grupo_Compuesto.Asistencia2, Grupo_Compuesto.Asistencia3,  Grupo_Compuesto.Promedio, Grupo_Compuesto.Circulo_Estudio, 
+                         Grupo_Compuesto.Semestre AS Sem, Grupo_Compuesto.Asistencia1, Grupo_Compuesto.Asistencia2, Grupo_Compuesto.Asistencia3, Grupo_Compuesto.Promedio, Grupo_Compuesto.Circulo_Estudio, 
                          Grupo_Compuesto.Atencion_Medica, Grupo_Compuesto.Platicas, Grupo_Compuesto.Psicologica, Grupo_Compuesto.Apoyo_Externo, Grupo_Compuesto.A, Grupo_Compuesto.B, Grupo_Compuesto.D, Grupo_Compuesto.N, 
                          Grupo_Compuesto.I, Grupo_Compuesto.R
 FROM            Grupo_Compuesto INNER JOIN
@@ -736,7 +736,6 @@ WHERE        (Alumno.Estatus = 'En Curso')</CommandText>
               <Mapping SourceColumn="Entrevista2" DataSetColumn="Entrevista2" />
               <Mapping SourceColumn="Entrevista3" DataSetColumn="Entrevista3" />
               <Mapping SourceColumn="Sem" DataSetColumn="Sem" />
-              <Mapping SourceColumn="Promedio" DataSetColumn="Promedio" />
               <Mapping SourceColumn="Circulo_Estudio" DataSetColumn="Circulo_Estudio" />
               <Mapping SourceColumn="Atencion_Medica" DataSetColumn="Atencion_Medica" />
               <Mapping SourceColumn="Platicas" DataSetColumn="Platicas" />
@@ -757,6 +756,7 @@ WHERE        (Alumno.Estatus = 'En Curso')</CommandText>
               <Mapping SourceColumn="Cal5" DataSetColumn="Cal5" />
               <Mapping SourceColumn="Cal6" DataSetColumn="Cal6" />
               <Mapping SourceColumn="Asistencia3" DataSetColumn="Asistencia3" />
+              <Mapping SourceColumn="Promedio" DataSetColumn="Promedio1" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="TutoriaConnectionString1 (Web.config)" DbObjectName="Tutoria.dbo.Alumno" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataByGrade" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataByGrade" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataByGrade" UserSourceName="FillBy">
@@ -899,7 +899,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
   <xs:element name="dsTutorias" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msdata:EnforceConstraints="False" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsTutorias" msprop:Generator_UserDSName="dsTutorias">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Instituto" msprop:Generator_TableClassName="InstitutoDataTable" msprop:Generator_TableVarName="tableInstituto" msprop:Generator_RowChangedName="InstitutoRowChanged" msprop:Generator_TablePropName="Instituto" msprop:Generator_RowDeletingName="InstitutoRowDeleting" msprop:Generator_RowChangingName="InstitutoRowChanging" msprop:Generator_RowEvHandlerName="InstitutoRowChangeEventHandler" msprop:Generator_RowDeletedName="InstitutoRowDeleted" msprop:Generator_RowClassName="InstitutoRow" msprop:Generator_UserTableName="Instituto" msprop:Generator_RowEvArgName="InstitutoRowChangeEvent">
+        <xs:element name="Instituto" msprop:Generator_TableClassName="InstitutoDataTable" msprop:Generator_TableVarName="tableInstituto" msprop:Generator_TablePropName="Instituto" msprop:Generator_RowDeletingName="InstitutoRowDeleting" msprop:Generator_RowChangingName="InstitutoRowChanging" msprop:Generator_RowEvHandlerName="InstitutoRowChangeEventHandler" msprop:Generator_RowDeletedName="InstitutoRowDeleted" msprop:Generator_UserTableName="Instituto" msprop:Generator_RowChangedName="InstitutoRowChanged" msprop:Generator_RowEvArgName="InstitutoRowChangeEvent" msprop:Generator_RowClassName="InstitutoRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -927,7 +927,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Grupo_Compuesto" msprop:Generator_TableClassName="Grupo_CompuestoDataTable" msprop:Generator_TableVarName="tableGrupo_Compuesto" msprop:Generator_RowChangedName="Grupo_CompuestoRowChanged" msprop:Generator_TablePropName="Grupo_Compuesto" msprop:Generator_RowDeletingName="Grupo_CompuestoRowDeleting" msprop:Generator_RowChangingName="Grupo_CompuestoRowChanging" msprop:Generator_RowEvHandlerName="Grupo_CompuestoRowChangeEventHandler" msprop:Generator_RowDeletedName="Grupo_CompuestoRowDeleted" msprop:Generator_RowClassName="Grupo_CompuestoRow" msprop:Generator_UserTableName="Grupo_Compuesto" msprop:Generator_RowEvArgName="Grupo_CompuestoRowChangeEvent">
+        <xs:element name="Grupo_Compuesto" msprop:Generator_TableClassName="Grupo_CompuestoDataTable" msprop:Generator_TableVarName="tableGrupo_Compuesto" msprop:Generator_TablePropName="Grupo_Compuesto" msprop:Generator_RowDeletingName="Grupo_CompuestoRowDeleting" msprop:Generator_RowChangingName="Grupo_CompuestoRowChanging" msprop:Generator_RowEvHandlerName="Grupo_CompuestoRowChangeEventHandler" msprop:Generator_RowDeletedName="Grupo_CompuestoRowDeleted" msprop:Generator_UserTableName="Grupo_Compuesto" msprop:Generator_RowChangedName="Grupo_CompuestoRowChanged" msprop:Generator_RowEvArgName="Grupo_CompuestoRowChangeEvent" msprop:Generator_RowClassName="Grupo_CompuestoRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID_Grupo" msprop:Generator_ColumnVarNameInTable="columnID_Grupo" msprop:Generator_ColumnPropNameInRow="ID_Grupo" msprop:Generator_ColumnPropNameInTable="ID_GrupoColumn" msprop:Generator_UserColumnName="ID_Grupo" type="xs:int" />
@@ -1029,7 +1029,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Alumno" msprop:Generator_TableClassName="AlumnoDataTable" msprop:Generator_TableVarName="tableAlumno" msprop:Generator_RowChangedName="AlumnoRowChanged" msprop:Generator_TablePropName="Alumno" msprop:Generator_RowDeletingName="AlumnoRowDeleting" msprop:Generator_RowChangingName="AlumnoRowChanging" msprop:Generator_RowEvHandlerName="AlumnoRowChangeEventHandler" msprop:Generator_RowDeletedName="AlumnoRowDeleted" msprop:Generator_RowClassName="AlumnoRow" msprop:Generator_UserTableName="Alumno" msprop:Generator_RowEvArgName="AlumnoRowChangeEvent">
+        <xs:element name="Alumno" msprop:Generator_TableClassName="AlumnoDataTable" msprop:Generator_TableVarName="tableAlumno" msprop:Generator_TablePropName="Alumno" msprop:Generator_RowDeletingName="AlumnoRowDeleting" msprop:Generator_RowChangingName="AlumnoRowChanging" msprop:Generator_RowEvHandlerName="AlumnoRowChangeEventHandler" msprop:Generator_RowDeletedName="AlumnoRowDeleted" msprop:Generator_UserTableName="Alumno" msprop:Generator_RowChangedName="AlumnoRowChanged" msprop:Generator_RowEvArgName="AlumnoRowChangeEvent" msprop:Generator_RowClassName="AlumnoRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="No_control" msprop:Generator_ColumnVarNameInTable="columnNo_control" msprop:Generator_ColumnPropNameInRow="No_control" msprop:Generator_ColumnPropNameInTable="No_controlColumn" msprop:Generator_UserColumnName="No_control" type="xs:int" />
@@ -1073,7 +1073,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Maestro" msprop:Generator_TableClassName="MaestroDataTable" msprop:Generator_TableVarName="tableMaestro" msprop:Generator_TablePropName="Maestro" msprop:Generator_RowDeletingName="MaestroRowDeleting" msprop:Generator_RowChangingName="MaestroRowChanging" msprop:Generator_RowEvHandlerName="MaestroRowChangeEventHandler" msprop:Generator_RowDeletedName="MaestroRowDeleted" msprop:Generator_UserTableName="Maestro" msprop:Generator_RowChangedName="MaestroRowChanged" msprop:Generator_RowEvArgName="MaestroRowChangeEvent" msprop:Generator_RowClassName="MaestroRow">
+        <xs:element name="Maestro" msprop:Generator_TableClassName="MaestroDataTable" msprop:Generator_TableVarName="tableMaestro" msprop:Generator_RowChangedName="MaestroRowChanged" msprop:Generator_TablePropName="Maestro" msprop:Generator_RowDeletingName="MaestroRowDeleting" msprop:Generator_RowChangingName="MaestroRowChanging" msprop:Generator_RowEvHandlerName="MaestroRowChangeEventHandler" msprop:Generator_RowDeletedName="MaestroRowDeleted" msprop:Generator_RowClassName="MaestroRow" msprop:Generator_UserTableName="Maestro" msprop:Generator_RowEvArgName="MaestroRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -1129,7 +1129,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Grupo1" msprop:Generator_TableClassName="Grupo1DataTable" msprop:Generator_TableVarName="tableGrupo1" msprop:Generator_TablePropName="Grupo1" msprop:Generator_RowDeletingName="Grupo1RowDeleting" msprop:Generator_RowChangingName="Grupo1RowChanging" msprop:Generator_RowEvHandlerName="Grupo1RowChangeEventHandler" msprop:Generator_RowDeletedName="Grupo1RowDeleted" msprop:Generator_UserTableName="Grupo1" msprop:Generator_RowChangedName="Grupo1RowChanged" msprop:Generator_RowEvArgName="Grupo1RowChangeEvent" msprop:Generator_RowClassName="Grupo1Row">
+        <xs:element name="Grupo1" msprop:Generator_TableClassName="Grupo1DataTable" msprop:Generator_TableVarName="tableGrupo1" msprop:Generator_RowChangedName="Grupo1RowChanged" msprop:Generator_TablePropName="Grupo1" msprop:Generator_RowDeletingName="Grupo1RowDeleting" msprop:Generator_RowChangingName="Grupo1RowChanging" msprop:Generator_RowEvHandlerName="Grupo1RowChangeEventHandler" msprop:Generator_RowDeletedName="Grupo1RowDeleted" msprop:Generator_RowClassName="Grupo1Row" msprop:Generator_UserTableName="Grupo1" msprop:Generator_RowEvArgName="Grupo1RowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -1172,7 +1172,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Carrera" msprop:Generator_TableClassName="CarreraDataTable" msprop:Generator_TableVarName="tableCarrera" msprop:Generator_TablePropName="Carrera" msprop:Generator_RowDeletingName="CarreraRowDeleting" msprop:Generator_RowChangingName="CarreraRowChanging" msprop:Generator_RowEvHandlerName="CarreraRowChangeEventHandler" msprop:Generator_RowDeletedName="CarreraRowDeleted" msprop:Generator_UserTableName="Carrera" msprop:Generator_RowChangedName="CarreraRowChanged" msprop:Generator_RowEvArgName="CarreraRowChangeEvent" msprop:Generator_RowClassName="CarreraRow">
+        <xs:element name="Carrera" msprop:Generator_TableClassName="CarreraDataTable" msprop:Generator_TableVarName="tableCarrera" msprop:Generator_RowChangedName="CarreraRowChanged" msprop:Generator_TablePropName="Carrera" msprop:Generator_RowDeletingName="CarreraRowDeleting" msprop:Generator_RowChangingName="CarreraRowChanging" msprop:Generator_RowEvHandlerName="CarreraRowChangeEventHandler" msprop:Generator_RowDeletedName="CarreraRowDeleted" msprop:Generator_RowClassName="CarreraRow" msprop:Generator_UserTableName="Carrera" msprop:Generator_RowEvArgName="CarreraRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -1207,7 +1207,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Grupo" msprop:Generator_TableClassName="GrupoDataTable" msprop:Generator_TableVarName="tableGrupo" msprop:Generator_TablePropName="Grupo" msprop:Generator_RowDeletingName="GrupoRowDeleting" msprop:Generator_RowChangingName="GrupoRowChanging" msprop:Generator_RowEvHandlerName="GrupoRowChangeEventHandler" msprop:Generator_RowDeletedName="GrupoRowDeleted" msprop:Generator_UserTableName="Grupo" msprop:Generator_RowChangedName="GrupoRowChanged" msprop:Generator_RowEvArgName="GrupoRowChangeEvent" msprop:Generator_RowClassName="GrupoRow">
+        <xs:element name="Grupo" msprop:Generator_TableClassName="GrupoDataTable" msprop:Generator_TableVarName="tableGrupo" msprop:Generator_RowChangedName="GrupoRowChanged" msprop:Generator_TablePropName="Grupo" msprop:Generator_RowDeletingName="GrupoRowDeleting" msprop:Generator_RowChangingName="GrupoRowChanging" msprop:Generator_RowEvHandlerName="GrupoRowChangeEventHandler" msprop:Generator_RowDeletedName="GrupoRowDeleted" msprop:Generator_RowClassName="GrupoRow" msprop:Generator_UserTableName="Grupo" msprop:Generator_RowEvArgName="GrupoRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -1250,7 +1250,7 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Alumno1" msprop:Generator_TableClassName="Alumno1DataTable" msprop:Generator_TableVarName="tableAlumno1" msprop:Generator_RowChangedName="Alumno1RowChanged" msprop:Generator_TablePropName="Alumno1" msprop:Generator_RowDeletingName="Alumno1RowDeleting" msprop:Generator_RowChangingName="Alumno1RowChanging" msprop:Generator_RowEvHandlerName="Alumno1RowChangeEventHandler" msprop:Generator_RowDeletedName="Alumno1RowDeleted" msprop:Generator_RowClassName="Alumno1Row" msprop:Generator_UserTableName="Alumno1" msprop:Generator_RowEvArgName="Alumno1RowChangeEvent">
+        <xs:element name="Alumno1" msprop:Generator_TableClassName="Alumno1DataTable" msprop:Generator_TableVarName="tableAlumno1" msprop:Generator_TablePropName="Alumno1" msprop:Generator_RowDeletingName="Alumno1RowDeleting" msprop:Generator_RowChangingName="Alumno1RowChanging" msprop:Generator_RowEvHandlerName="Alumno1RowChangeEventHandler" msprop:Generator_RowDeletedName="Alumno1RowDeleted" msprop:Generator_UserTableName="Alumno1" msprop:Generator_RowChangedName="Alumno1RowChanged" msprop:Generator_RowEvArgName="Alumno1RowChangeEvent" msprop:Generator_RowClassName="Alumno1Row">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="No_control" msprop:Generator_ColumnVarNameInTable="columnNo_control" msprop:Generator_ColumnPropNameInRow="No_control" msprop:Generator_ColumnPropNameInTable="No_controlColumn" msprop:Generator_UserColumnName="No_control" type="xs:int" />
@@ -1400,10 +1400,17 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="Promedio1" msdata:Caption="Promedio" msprop:Generator_ColumnVarNameInTable="columnPromedio1" msprop:Generator_ColumnPropNameInRow="Promedio1" msprop:Generator_ColumnPropNameInTable="Promedio1Column" msprop:Generator_UserColumnName="Promedio1" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Administrador" msprop:Generator_TableClassName="AdministradorDataTable" msprop:Generator_TableVarName="tableAdministrador" msprop:Generator_TablePropName="Administrador" msprop:Generator_RowDeletingName="AdministradorRowDeleting" msprop:Generator_RowChangingName="AdministradorRowChanging" msprop:Generator_RowEvHandlerName="AdministradorRowChangeEventHandler" msprop:Generator_RowDeletedName="AdministradorRowDeleted" msprop:Generator_UserTableName="Administrador" msprop:Generator_RowChangedName="AdministradorRowChanged" msprop:Generator_RowEvArgName="AdministradorRowChangeEvent" msprop:Generator_RowClassName="AdministradorRow">
+        <xs:element name="Administrador" msprop:Generator_TableClassName="AdministradorDataTable" msprop:Generator_TableVarName="tableAdministrador" msprop:Generator_RowChangedName="AdministradorRowChanged" msprop:Generator_TablePropName="Administrador" msprop:Generator_RowDeletingName="AdministradorRowDeleting" msprop:Generator_RowChangingName="AdministradorRowChanging" msprop:Generator_RowEvHandlerName="AdministradorRowChangeEventHandler" msprop:Generator_RowDeletedName="AdministradorRowDeleted" msprop:Generator_RowClassName="AdministradorRow" msprop:Generator_UserTableName="Administrador" msprop:Generator_RowEvArgName="AdministradorRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -1493,12 +1500,12 @@ WHERE        (Alumno.No_control = @NoControl)</CommandText>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="FK__Grupo_Com__No_co__46E78A0C1" msdata:parent="Alumno" msdata:child="Grupo_Compuesto" msdata:parentkey="No_control" msdata:childkey="No_control" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__No_co__46E78A0C1" msprop:Generator_ParentPropName="AlumnoRow" msprop:Generator_RelationVarName="relationFK__Grupo_Com__No_co__46E78A0C1" msprop:Generator_UserParentTable="Alumno" />
-      <msdata:Relationship name="FK__Grupo_Com__ID_Gr__628FA481" msdata:parent="Grupo1" msdata:child="Grupo_Compuesto" msdata:parentkey="ID" msdata:childkey="ID_Grupo" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__ID_Gr__628FA481" msprop:Generator_RelationVarName="relationFK__Grupo_Com__ID_Gr__628FA481" msprop:Generator_UserParentTable="Grupo1" msprop:Generator_ParentPropName="Grupo1Row" />
-      <msdata:Relationship name="FK__Grupo__ID_Maestr__60A75C0F" msdata:parent="Maestro" msdata:child="Grupo1" msdata:parentkey="ID" msdata:childkey="ID_Maestro" msprop:Generator_UserChildTable="Grupo1" msprop:Generator_ChildPropName="GetGrupo1Rows" msprop:Generator_UserRelationName="FK__Grupo__ID_Maestr__60A75C0F" msprop:Generator_ParentPropName="MaestroRow" msprop:Generator_RelationVarName="relationFK__Grupo__ID_Maestr__60A75C0F" msprop:Generator_UserParentTable="Maestro" />
-      <msdata:Relationship name="FK__Grupo_Com__ID_Gr__628FA4811" msdata:parent="Grupo" msdata:child="Grupo_Compuesto" msdata:parentkey="ID" msdata:childkey="ID_Grupo" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__ID_Gr__628FA4811" msprop:Generator_RelationVarName="relationFK__Grupo_Com__ID_Gr__628FA4811" msprop:Generator_UserParentTable="Grupo" msprop:Generator_ParentPropName="GrupoRow" />
-      <msdata:Relationship name="FK__Grupo_Com__No_co__6383C8BA" msdata:parent="Alumno1" msdata:child="Grupo_Compuesto" msdata:parentkey="No_control" msdata:childkey="No_control" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__No_co__6383C8BA" msprop:Generator_ParentPropName="Alumno1Row" msprop:Generator_RelationVarName="relationFK__Grupo_Com__No_co__6383C8BA" msprop:Generator_UserParentTable="Alumno1" />
-      <msdata:Relationship name="FK__Grupo__ID_Maestr__60A75C0F1" msdata:parent="Maestro" msdata:child="Grupo" msdata:parentkey="ID" msdata:childkey="ID_Maestro" msprop:Generator_UserChildTable="Grupo" msprop:Generator_ChildPropName="GetGrupoRows" msprop:Generator_UserRelationName="FK__Grupo__ID_Maestr__60A75C0F1" msprop:Generator_RelationVarName="relationFK__Grupo__ID_Maestr__60A75C0F1" msprop:Generator_UserParentTable="Maestro" msprop:Generator_ParentPropName="MaestroRow" />
+      <msdata:Relationship name="FK__Grupo_Com__No_co__46E78A0C1" msdata:parent="Alumno" msdata:child="Grupo_Compuesto" msdata:parentkey="No_control" msdata:childkey="No_control" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__No_co__46E78A0C1" msprop:Generator_RelationVarName="relationFK__Grupo_Com__No_co__46E78A0C1" msprop:Generator_UserParentTable="Alumno" msprop:Generator_ParentPropName="AlumnoRow" />
+      <msdata:Relationship name="FK__Grupo_Com__ID_Gr__628FA481" msdata:parent="Grupo1" msdata:child="Grupo_Compuesto" msdata:parentkey="ID" msdata:childkey="ID_Grupo" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__ID_Gr__628FA481" msprop:Generator_ParentPropName="Grupo1Row" msprop:Generator_RelationVarName="relationFK__Grupo_Com__ID_Gr__628FA481" msprop:Generator_UserParentTable="Grupo1" />
+      <msdata:Relationship name="FK__Grupo__ID_Maestr__60A75C0F" msdata:parent="Maestro" msdata:child="Grupo1" msdata:parentkey="ID" msdata:childkey="ID_Maestro" msprop:Generator_UserChildTable="Grupo1" msprop:Generator_ChildPropName="GetGrupo1Rows" msprop:Generator_UserRelationName="FK__Grupo__ID_Maestr__60A75C0F" msprop:Generator_RelationVarName="relationFK__Grupo__ID_Maestr__60A75C0F" msprop:Generator_UserParentTable="Maestro" msprop:Generator_ParentPropName="MaestroRow" />
+      <msdata:Relationship name="FK__Grupo_Com__ID_Gr__628FA4811" msdata:parent="Grupo" msdata:child="Grupo_Compuesto" msdata:parentkey="ID" msdata:childkey="ID_Grupo" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__ID_Gr__628FA4811" msprop:Generator_ParentPropName="GrupoRow" msprop:Generator_RelationVarName="relationFK__Grupo_Com__ID_Gr__628FA4811" msprop:Generator_UserParentTable="Grupo" />
+      <msdata:Relationship name="FK__Grupo_Com__No_co__6383C8BA" msdata:parent="Alumno1" msdata:child="Grupo_Compuesto" msdata:parentkey="No_control" msdata:childkey="No_control" msprop:Generator_UserChildTable="Grupo_Compuesto" msprop:Generator_ChildPropName="GetGrupo_CompuestoRows" msprop:Generator_UserRelationName="FK__Grupo_Com__No_co__6383C8BA" msprop:Generator_RelationVarName="relationFK__Grupo_Com__No_co__6383C8BA" msprop:Generator_UserParentTable="Alumno1" msprop:Generator_ParentPropName="Alumno1Row" />
+      <msdata:Relationship name="FK__Grupo__ID_Maestr__60A75C0F1" msdata:parent="Maestro" msdata:child="Grupo" msdata:parentkey="ID" msdata:childkey="ID_Maestro" msprop:Generator_UserChildTable="Grupo" msprop:Generator_ChildPropName="GetGrupoRows" msprop:Generator_UserRelationName="FK__Grupo__ID_Maestr__60A75C0F1" msprop:Generator_ParentPropName="MaestroRow" msprop:Generator_RelationVarName="relationFK__Grupo__ID_Maestr__60A75C0F1" msprop:Generator_UserParentTable="Maestro" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

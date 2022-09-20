@@ -78,12 +78,12 @@
                                         <a href="Carreras.aspx">Carreras</a>
                                     </li>
                                     <li >
-                                        <a href="Administradores.aspx">Coordinadores Academicos</a>
+                                        <a href="Administradores.aspx">Coordinadores de tutorias</a>
                                     </li>
                                     
                                 </ul>
                             </li>
-                            <li runat="server" id="admin" visible="false" class="menu-item-has-children"><a href="#">Coordinador Academico</a>
+                            <li runat="server" id="admin" visible="false" class="menu-item-has-children"><a href="#">Coordinador de Tutorias</a>
                                 <ul class="sub-menu">
                                    
                                     <li >

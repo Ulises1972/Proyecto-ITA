@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpreadsheetLight;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -29,7 +30,28 @@ namespace TutoriasWeb
 
         protected void Btn_addAlumno_Click(object sender, EventArgs e)
         {
-            if(al_id.Text.Replace(" ","") == "" || al_nombre.Text.Replace(" ", "") == "" || ( al_aPaterno.Text.Replace(" ", "") == "" && al_aMaterno.Text.Replace(" ", "") == "" ) )
+            if (FUalumnos.HasFile)
+            {
+                SLDocument sl = new SLDocument(FUalumnos.PostedFile.InputStream);
+                SLWorksheetStatistics props = sl.GetWorksheetStatistics();
+
+                int ultimaFila = props.EndRowIndex;
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('" + sl.GetCellValueAsString("A1") + "'); ", true);
+
+                for(int i = 2; i <= ultimaFila; i++)
+                {
+                    if (mt.AlumnoAdd(Metodos.toInt(sl.GetCellValueAsString("A"+i).Trim(' ')), sl.GetCellValueAsString("B"+i).ToUpper(), sl.GetCellValueAsString("C"+i).Trim(' ').ToUpper(), sl.GetCellValueAsString("D"+i).Trim(' ').ToUpper(), sl.GetCellValueAsString("E" + i).Trim(' ').ToUpper(), Metodos.toInt(sl.GetCellValueAsString("F" + i).Trim(' ').ToUpper() == "" ? "1" : sl.GetCellValueAsString("F" + i).Trim(' ').ToUpper()), Metodos.toInt(sl.GetCellValueAsString("G" + i).Trim(' ').ToUpper() == "" ? "0" : sl.GetCellValueAsString("G" + i).Trim(' ').ToUpper())))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al ingresar el alumno, asegurese de ingresar la informacion correcta y que no se repita el No de control'); ", true);
+                        return;
+                    }
+                }
+                cleanModal();
+                actualiza();
+                return;
+            }
+
+            if(al_id.Text.Replace(" ","") == "" || al_nombre.Text.Trim(' ') == "" || ( al_aPaterno.Text.Trim(' ') == "" && al_aMaterno.Text.Trim(' ') == "" ) )
             {
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Solo un campo de apellido puede ir vacio'); ", true);
                 cleanModal();
@@ -37,14 +59,14 @@ namespace TutoriasWeb
             }
             if (Btn_addAlumno.Text=="Agregar")
             {
-                if (mt.AlumnoAdd(Metodos.toInt(al_id.Text.Replace(" ", "")), al_nombre.Text.ToUpper(), al_aPaterno.Text.Replace(" ", "").ToUpper(), al_aMaterno.Text.Replace(" ", "").ToUpper(), Session["carrera"].ToString()))
+                if (mt.AlumnoAdd(Metodos.toInt(al_id.Text.Trim(' ')), al_nombre.Text.ToUpper(), al_aPaterno.Text.Trim(' ').ToUpper(), al_aMaterno.Text.Trim(' ').ToUpper(), Session["carrera"].ToString()))
                 {
                     ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al ingresar el alumno, asegurese de ingresar la informacion correcta y que no se repita el No de control'); ", true);
                 }
             }
             else
             {
-                if (mt.AlumnoUpdate(Metodos.toInt(al_id.Text.Replace(" ", "")), al_nombre.Text.ToUpper(), al_aPaterno.Text.Replace(" ", "").ToUpper(), al_aMaterno.Text.Replace(" ", "").ToUpper()))
+                if (mt.AlumnoUpdate(Metodos.toInt(al_id.Text.Trim(' ')), al_nombre.Text.ToUpper(), al_aPaterno.Text.Trim(' ').ToUpper(), al_aMaterno.Text.Trim(' ').ToUpper()))
                 {
                     ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert('Error al actualizar la informacion, contacte a soporte'); ", true);
                 }
@@ -56,7 +78,7 @@ namespace TutoriasWeb
 
         protected void actualiza()
         {
-            t = mt.AlumnosGetByCarrera(Session["carrera"].ToString(), Tb_buscar.Text.Replace(" ", ""));
+            t = mt.AlumnosGetByCarrera(Session["carrera"].ToString(), Tb_buscar.Text.Trim(' '));
 
             if(t.Rows.Count > 0)
             {

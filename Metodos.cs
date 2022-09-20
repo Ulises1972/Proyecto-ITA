@@ -946,6 +946,34 @@ namespace TutoriasWeb
             }
         }
 
+        public bool AlumnoAdd(int NoControl, string Nombre, string A_Paterno, string A_Materno, string Carrera, int Semestre, int Tutorias)
+        {
+            cmd.Connection = cnn;
+            cmd.Connection.Open();
+            cmd.CommandText = "if(exists(select No_control from alumno where No_control =" + NoControl.ToString() + ")) BEGIN select 0 " +
+                "END ELSE BEGIN insert into alumno(No_control, Nombre,A_Paterno,A_Materno,carrera,semestre,tutoria,estatus) values(" +
+                NoControl.ToString() + ",'" + Nombre + "','" + A_Paterno + "','" + A_Materno + "','" + Carrera + "'," + Semestre + "," + Tutorias + ",'NO ASIGNADO') select 1 END";
+            try
+            {
+                if (cmd.ExecuteScalar().ToString() == "1")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
         public bool AlumnoUpdate(int NoControl, string Nombre, string A_Paterno, string A_Materno)
         {
             cmd.Connection = cnn;
@@ -1094,7 +1122,7 @@ namespace TutoriasWeb
         {
             cmd.Connection = cnn;
             cmd.Connection.Open();
-            cmd.CommandText = "select No_control,A_Paterno,A_Materno,Nombre,Semestre,Estatus,Tutoria from alumno where Estatus = 'no asignado'" +
+            cmd.CommandText = "select No_control,A_Paterno,A_Materno,Nombre,Semestre,Estatus,Tutoria from alumno where Estatus not in('en curso','liverado') " +
                 " and carrera ='" + carrera + "' and tutoria =" + GradoTutoria;
             try
             {
@@ -1278,7 +1306,7 @@ namespace TutoriasWeb
             cmd.Connection = cnn;
             cmd.Connection.Open();
             cmd.CommandText = " declare @idGrupo int =" + IdGrupo.ToString() +
-            " select(case when substring(g.Nombre, 8, 1) = 'A' then 'ENE-JUN' else 'AGO-DIC' end) periodo ,(case when substring(g.Nombre,"
+            " select(case when substring(g.Nombre, 8, 1) = 'A' then 'ENE-JUN' else 'AGO-DIC' end) periodo , g.ID,(case when substring(g.Nombre,"
             + "10,1) = '1' then 'Primer' when substring(g.Nombre, 10,1) = '2' then 'Segundo' else 'Tercer' end + ' semestre') semestre,"	
             + "(select count(No_control) from Grupo_Compuesto where ID_Grupo = @idGrupo and A='SI' and B='SI' ) alumnosAtendidos,"
             + "(select count(No_control) from Grupo_Compuesto where ID_Grupo = @idGrupo ) alumnosAsignados,(select Nombre_Maestro from maestro where"
@@ -1720,7 +1748,7 @@ namespace TutoriasWeb
 
             if (dt.Rows.Count > 0)
             {
-                string nombreGrupo = dt.Rows[0]["NombreGrupo"].ToString();
+                string nombreGrupo = dt.Rows[0]["NombreGrupo"].ToString() + "_" + dt.Rows[0]["ID"].ToString();
                 // Create a new PDF document
                 PdfDocument document = new PdfDocument();
 

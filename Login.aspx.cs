@@ -31,6 +31,7 @@ namespace TutoriasWeb
             {
                 case ("adminsu"):
                     Session["id"] = in_user.Value;
+                    Session["carrera"] = "";
                     Response.Redirect("Home.aspx", false);
                     break;
 

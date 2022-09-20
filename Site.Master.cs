@@ -22,6 +22,14 @@ namespace TutoriasWeb
             {
                 if (!IsPostBack)
                 {
+                    dsTutoriasTableAdapters.CarreraTableAdapter tac = new dsTutoriasTableAdapters.CarreraTableAdapter();
+                    dsTutorias.CarreraDataTable dtc = tac.GetDataByNombre(Session["carrera"].ToString());
+
+                    if (dtc.Rows.Count > 0)
+                    {
+                        img_carrera.ImageUrl = dtc[0][2].ToString();
+                        img_carrera.Visible = true;
+                    }
 
 
                     dsTutoriasTableAdapters.InstitutoTableAdapter ta = new dsTutoriasTableAdapters.InstitutoTableAdapter();
@@ -43,13 +51,6 @@ namespace TutoriasWeb
                     }
                     else
                     {
-                        dsTutoriasTableAdapters.CarreraTableAdapter tac = new dsTutoriasTableAdapters.CarreraTableAdapter();
-                        dsTutorias.CarreraDataTable dtc = tac.GetDataByNombre(Session["carrera"].ToString());
-
-                        if (dtc.Rows.Count > 0)
-                        {
-                            img_carrera.ImageUrl = dtc[0][2].ToString();
-                        }
                         if (Session["ID"].ToString().Substring(3, 5).ToUpper() == "ADMIN")
                         {
                             admin.Visible = true;
@@ -60,7 +61,6 @@ namespace TutoriasWeb
                             tutor.Visible = true;
                             reportes.Visible = true;
                         }
-                        img_carrera.Visible = true;
                     }
                     menu.Visible = true;
                     btn_logout.Visible = true;

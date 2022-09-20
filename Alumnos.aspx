@@ -93,10 +93,10 @@
                 <div class="modal-body">
                   <div class="col-12">
                       <div class="form-group">
-                          <%--<div>
+                          <div>
                               <label>Importar lista</label>
                           </div>
-                              <asp:FileUpload runat="server" />--%>
+                              <asp:FileUpload runat="server" ID="FUalumnos" />
                           <div style="margin-top:10px;">
                               <label>No de control</label>
                               <asp:TextBox runat="server" ID="al_id" CssClass="form-control text-uppercase" AutoCompleteType="Disabled" MaxLength="8" TextMode="Number" />

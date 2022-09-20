@@ -3474,6 +3474,8 @@ namespace TutoriasWeb {
             
             private global::System.Data.DataColumn columnAsistencia3;
             
+            private global::System.Data.DataColumn columnPromedio1;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public Alumno1DataTable() {
@@ -3773,6 +3775,14 @@ namespace TutoriasWeb {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Promedio1Column {
+                get {
+                    return this.columnPromedio1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3840,7 +3850,8 @@ namespace TutoriasWeb {
                         string Cal4, 
                         string Cal5, 
                         string Cal6, 
-                        string Asistencia3) {
+                        string Asistencia3, 
+                        string Promedio1) {
                 Alumno1Row rowAlumno1Row = ((Alumno1Row)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         No_control,
@@ -3875,7 +3886,8 @@ namespace TutoriasWeb {
                         Cal4,
                         Cal5,
                         Cal6,
-                        Asistencia3};
+                        Asistencia3,
+                        Promedio1};
                 rowAlumno1Row.ItemArray = columnValuesArray;
                 this.Rows.Add(rowAlumno1Row);
                 return rowAlumno1Row;
@@ -3938,6 +3950,7 @@ namespace TutoriasWeb {
                 this.columnCal5 = base.Columns["Cal5"];
                 this.columnCal6 = base.Columns["Cal6"];
                 this.columnAsistencia3 = base.Columns["Asistencia3"];
+                this.columnPromedio1 = base.Columns["Promedio1"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4009,6 +4022,8 @@ namespace TutoriasWeb {
                 base.Columns.Add(this.columnCal6);
                 this.columnAsistencia3 = new global::System.Data.DataColumn("Asistencia3", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAsistencia3);
+                this.columnPromedio1 = new global::System.Data.DataColumn("Promedio1", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPromedio1);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnNo_control.AllowDBNull = false;
@@ -4042,6 +4057,8 @@ namespace TutoriasWeb {
                 this.columnCal5.MaxLength = 10;
                 this.columnCal6.MaxLength = 10;
                 this.columnAsistencia3.MaxLength = 20;
+                this.columnPromedio1.Caption = "Promedio";
+                this.columnPromedio1.MaxLength = 20;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6532,6 +6549,22 @@ namespace TutoriasWeb {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Promedio1 {
+                get {
+                    try {
+                        return ((string)(this[this.tableAlumno1.Promedio1Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Promedio1\' de la tabla \'Alumno1\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableAlumno1.Promedio1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsEntrevista1Null() {
                 return this.IsNull(this.tableAlumno1.Entrevista1Column);
             }
@@ -6840,6 +6873,18 @@ namespace TutoriasWeb {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetAsistencia3Null() {
                 this[this.tableAlumno1.Asistencia3Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPromedio1Null() {
+                return this.IsNull(this.tableAlumno1.Promedio1Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPromedio1Null() {
+                this[this.tableAlumno1.Promedio1Column] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -10922,7 +10967,6 @@ WHERE Grupo.Estatus='ACTIVO' AND Maestro.Estatus='ACTIVO'";
             tableMapping.ColumnMappings.Add("Entrevista2", "Entrevista2");
             tableMapping.ColumnMappings.Add("Entrevista3", "Entrevista3");
             tableMapping.ColumnMappings.Add("Sem", "Sem");
-            tableMapping.ColumnMappings.Add("Promedio", "Promedio");
             tableMapping.ColumnMappings.Add("Circulo_Estudio", "Circulo_Estudio");
             tableMapping.ColumnMappings.Add("Atencion_Medica", "Atencion_Medica");
             tableMapping.ColumnMappings.Add("Platicas", "Platicas");
@@ -10943,6 +10987,7 @@ WHERE Grupo.Estatus='ACTIVO' AND Maestro.Estatus='ACTIVO'";
             tableMapping.ColumnMappings.Add("Cal5", "Cal5");
             tableMapping.ColumnMappings.Add("Cal6", "Cal6");
             tableMapping.ColumnMappings.Add("Asistencia3", "Asistencia3");
+            tableMapping.ColumnMappings.Add("Promedio", "Promedio1");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -10961,7 +11006,7 @@ WHERE Grupo.Estatus='ACTIVO' AND Maestro.Estatus='ACTIVO'";
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT        Alumno.No_control, Alumno.Nombre, Alumno.A_Paterno, Alumno.A_Materno, Alumno.Semestre, Alumno.Tutoria, Grupo_Compuesto.Cal1, Grupo_Compuesto.Cal2, Grupo_Compuesto.Cal3, Grupo_Compuesto.Cal4, 
                          Grupo_Compuesto.Cal5, Grupo_Compuesto.Cal6, Grupo_Compuesto.Entrevista1, Grupo_Compuesto.Entrevista2, Grupo_Compuesto.Entrevista3, Grupo_Compuesto.Comentarios, Grupo_Compuesto.ID, 
-                         Grupo_Compuesto.Semestre AS Sem, Grupo_Compuesto.Asistencia1, Grupo_Compuesto.Asistencia2, Grupo_Compuesto.Asistencia3,  Grupo_Compuesto.Promedio, Grupo_Compuesto.Circulo_Estudio, 
+                         Grupo_Compuesto.Semestre AS Sem, Grupo_Compuesto.Asistencia1, Grupo_Compuesto.Asistencia2, Grupo_Compuesto.Asistencia3, Grupo_Compuesto.Promedio, Grupo_Compuesto.Circulo_Estudio, 
                          Grupo_Compuesto.Atencion_Medica, Grupo_Compuesto.Platicas, Grupo_Compuesto.Psicologica, Grupo_Compuesto.Apoyo_Externo, Grupo_Compuesto.A, Grupo_Compuesto.B, Grupo_Compuesto.D, Grupo_Compuesto.N, 
                          Grupo_Compuesto.I, Grupo_Compuesto.R
 FROM            Grupo_Compuesto INNER JOIN

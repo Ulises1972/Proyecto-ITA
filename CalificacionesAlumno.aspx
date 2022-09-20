@@ -107,14 +107,14 @@
                                 <label >2</label>
                             </div>
                             <div class="row form-inline justify-content-md-around">
-                                <asp:TextBox ID="t5_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t5_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t6_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t6_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t7_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t7_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t8_1" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
-                                <asp:TextBox ID="t8_2" runat="server" CssClass="form-control" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t5_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t5_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t6_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t6_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t7_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t7_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t8_1" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
+                                <asp:TextBox ID="t8_2" runat="server" CssClass="form-control text-uppercase" Width="70" AutoCompleteType="Disabled" />
                             </div>
                             <div style="margin-top: 25px;">
                                 Nota:
