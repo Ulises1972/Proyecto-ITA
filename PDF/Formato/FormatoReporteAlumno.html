@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Informe Final de Tutorías</title>
+
+
+
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 200px;
+        }
+
+        .institution-name {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline;
+            margin: 15px 0;
+        }
+
+        .signature-area {
+            margin: 50px 0;
+            text-align: center;
+        }
+
+        .no-print {
+            display: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        .radio-cell {
+            width: 20px;
+        }
+
+        .checkbox-cell {
+            width: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="margin-top:35px;  width:100%;">
+        <!-- Encabezado superior con logos -->
+        <img Style="width:450px; margin-left:125px;" runat="server" src="../../img/EducacionTec.jpeg" />
+        <img Style="width:110px; margin-left:470px; margin-top:-20px; position:absolute;" runat="server" src="../../img/Bandera.jpeg" />
+        <br />
+        <br />
+    </div>
+
+    <!-- DESTINATARIOS -->
+    <div style="position:absolute; margin-left:880px; margin-top:0px; text-align:right;">
+        <h8 style="font-style:revert; right:500px; font-size:14px;"><b>Instituto Tecnológico de Aguascalientes</b></h8>
+        <br />
+        <h8 style="font-style:revert; right:500px; font-size:16px;">Departamento de Vinculación</h8>
+    </div>
+
+    <div style="position:absolute; margin-left:845px; margin-top:120px;">
+        <h8 style="font-style: revert; right: 500px; margin-left: 100px; font-size: 16px;">Aguascalientes, Ags., (DATE)</h8>
+        <br />
+        <h8 style="font-style: revert; right: 500px; margin-left: 125px; font-size: 16px;">Oficio No, (No. de Oficio)</h8>
+        <br />
+        <h8 style="font-style: revert; right: 500px; margin-left: -35px; font-size: 16px;">Asunto: Carta de Liberación Credito de Tutorias </h8>
+    </div>
+
+    <div class="text-left" style="position: absolute; margin-left: 140px; margin-top:230px;">
+        <h8 style="font-size:16px;"><b>(NOMBRE DE DEL DESTINATARIO)</b></h8>
+        <br />
+        <h8 style="font-size:16px;"><b>(PUESTO DEL DESTINATARIO)</b></h8>
+        <br />
+        <h8 style="font-size:16px;"><b>PRESENTE</b></h8>
+    </div>
+
+    <div style="position: absolute; margin-left:765px; margin-top:320px;">
+        <h8 style="font-size: 16px;"><b>At'n: Ags., (NOMBRE DE ENCARGAD@ DE OFICINA)</b></h8>
+        <br />
+        <h8 style="font-size: 15px; font-style: revert; right: 500px; margin-left: 75px;"><b>Encargado del departamnto de Vínculación</b></h8>
+        <br />
+    </div>
+
+    <!-- Redacción -->
+    <div style="position: absolute; margin-left:140px; margin-top:390px; font-size:15.5px;">
+        <p>
+            Por medio del presente me permito informale que el alumno: <b>C. (Nombre del Alumno)</b>  de la Carrera <b>(Nombre de la Carrera)</b>, de  este Instituto <br />
+            Tencológico, con No. de control <b>(No. de Control del Alumno)</b> ha cumplido con el credito de Tutorías cumpliendo con las actividades y entrevistas <br />
+            pertinentes solicitadas a lo largo de los diferentes niveles de tutorado en donde al alumnado aprobó exitosamente y cumpliendo con el crediticio <br />
+            que se le ha solcitado la institución <br /> <br />
+            Sin otro particular por el momento, quedo de usted.
+        </p>
+    </div>
+
+    <!-- ATENTAMENTE -->
+    <div class="text-left" style="position: absolute; margin-left: 140px; margin-top: 550px; ">
+        <h8 style="font-size:16px;"><b>ATENTAMENTE</b></h8>
+        <br />
+        <br />
+        <h8 style="font-size: 14px; margin-top: -50px;"><b><i>Excelencia en Educación Tencológica.</i></b></h8>
+        <br />
+        <h8 style="font-size: 13px;"><b><i>Ingenio, Cultura y Saber, que conducen a la Esxcelencia@</i></b></h8>
+        <br />
+    </div>
+
+    <div class="text-left" style="position: absolute; margin-left: 140px; margin-top: 660px;">
+        <h7 style="font-size:16px;"><b>(NOMBRE DE DEL DESTINATARIO)</b></h7>
+        <br />
+        <h7 style="font-size:16px;"><b>(PUESTO DEL DESTINATARIO)</b></h7>
+        <br />
+        <h7 style="font-size:16px;"><b>PRESENTE</b></h7>
+        <br />
+    </div>
+
+    <!-- Datos del documento -->
+    <div class="text-left" style="position: absolute; margin-left: 140px; margin-top: 750px;">
+        <h8 style="font-size: 13px;">ccp. Archivo</h8>
+        <br /> <br /><br />
+        <h8 style="font-size: 13px; ">SRBM/amchs*</h8>
+        <br />
+    </div>
+
+    <!-- Encabezado inferior -->
+
+    <div>
+        <img Style="width: 1040px; margin-left: 120px; margin-top:910px; position: absolute;" runat="server" src="../../img/HeaderDownjpeg.jpeg" />
+        <br />
+    </div>
+
+
+
+    <!-- Notas al pie -->
+    <!-- Estadísticas finales -->
+    <!-- Firma del tutor -->
+    <!-- Logos finales -->
+
+
+
+
+    <script>
+        // Función para convertir checkboxes y radios a símbolos visuales
+        document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+            el.style.display = 'none';
+            const symbol = document.createElement('span');
+            symbol.textContent = el.checked ? '✓' : 'a';
+            symbol.style.cursor = 'pointer';
+            symbol.addEventListener('click', () => {
+                el.checked = !el.checked;
+                symbol.textContent = el.checked ? '✓' : '□';
+            });
+            el.parentNode.insertBefore(symbol, el);
+        });
+    </script>
+</body>
+</html>

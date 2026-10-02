@@ -1,0 +1,564 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Informe Final de Tutorías</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 200px;
+        }
+
+        .institution-name {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline;
+            margin: 15px 0;
+        }
+
+        .signature-area {
+            margin: 50px 0;
+            text-align: center;
+        }
+
+        /* Clase para evitar arranques pegados al inicio de la página */
+        .espaciado-auto {
+            padding-top: 40px;
+            page-break-inside: avoid;
+        }
+
+        ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        .radio-cell {
+            width: 20px;
+        }
+
+        .checkbox-cell {
+            width: 20px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Encabezado con logos -->
+    <div class="espaciado-auto">
+        <img style="width:200px" class="logo" src="{{base}}/PDF/Recursos/SEPLogo.png" alt="SEP Logo" />
+        <img class="logo" style="width:200px;" src="{{base}}/PDF/Recursos/TECNMLogo.png" alt="TECNM Logo" />
+
+        <div class="institution-name">
+            Instituto Tecnológico de Aguascalientes
+        </div>
+    </div>
+
+
+
+    <!-- Título del documento -->
+    <div class="header espaciado-auto">
+        <h2>Anexo 5</h2>
+        <p><span>INSTITUTO TECNOLOGICO DE AGUASCALIENTES</span></p>
+        <p><span>DEPARTAMENTO DE DESARROLLO ACADÉMICO</span></p>
+        <p><span>Formato de Informe Final de Tutorías</span></p>
+
+        <p>
+            <b>
+                <i>
+                    Informe final semestre {{SEMESTRE_INFORME}} de 2026
+                </i>
+            </b>
+        </p>
+
+        <p>
+            <b>
+                Situación Académica de los alumnos de {{GRUPO}}
+                Tutoría de la Carrera {{CARRERA}}
+            </b>
+        </p>
+
+        <p>
+            Nombre de Tutor: {{NOMBRE_TUTOR}}
+            &nbsp;&nbsp;&nbsp;
+            Fecha de Informe: {{FECHA_INFORME}}
+        </p>
+
+        <p>
+            No. de alumnos asignados {{ASIGNADOS}}
+            &nbsp;&nbsp;
+            No. de alumnos atendidos {{ATENDIDOS}}
+            &nbsp;&nbsp;
+            Semestre: {{SEMESTRE}}
+        </p>
+    </div>
+
+
+
+
+    <!-- Sección 1 -->
+    <div class="espaciado-auto" style="margin-left: 20px;">
+        <p class="section-title">1.- Resultados específicos</p>
+        <p style="margin-left: 30px;">No. de alumnos canalizados a:</p>
+
+        <table style="width: 50%; margin-left: 30px; border-collapse: collapse;">
+            <tbody>
+                <tr>
+                    <td style="width: 60%; text-align: left;">Círculos de estudio</td>
+                    <td style="width: 40%; border-bottom: 1px solid black;">
+                        {{RES_CIRCULOS}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Atención médica</td>
+                    <td style="border-bottom: 1px solid black;">
+                        {{RES_MEDICA}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Pláticas o conferencias</td>
+                    <td style="border-bottom: 1px solid black;">
+                        {{RES_PLATICAS}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Atención psicológica</td>
+                    <td style="border-bottom: 1px solid black;">
+                        {{RES_PSICO}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Servicios de apoyo externo</td>
+                    <td style="border-bottom: 1px solid black;">
+                        {{RES_EXTERNO}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <!-- TABLA PRINCIPAL -->
+    <p class="section-title espaciado-auto">2.- Cumplimiento a la tutoría y Desempeño académico.</p>
+
+    <table class="espaciado-auto">
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 130px; background-color: lightgray;">No. De Control</th>
+                <th rowspan="2" style="width: 270px; background-color: lightgray;">Nombre</th>
+
+                <th colspan="3" style="background-color: lightgray;">Asistencias</th>
+
+                <th rowspan="2" style="width: 60px;">A</th>
+                <th rowspan="2" style="width: 60px;">B</th>
+
+                <th colspan="6" style="width: 100px;">Materia(s) Aprobadas</th>
+
+                <th rowspan="2" style="width: 115px;">Promedio</th>
+
+                <th colspan="4" style="width: 10px;">Situación Final</th>
+            </tr>
+
+            <tr>
+                <th style="background-color: lightgray;">1ra.</th>
+                <th style="background-color: lightgray;">2da.</th>
+                <th style="background-color: lightgray;">3ra.</th>
+
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+
+                <th>D</th>
+                <th>N</th>
+                <th>I</th>
+                <th>R</th>
+            </tr>
+        </thead>
+
+
+
+        <tbody>
+            {{TABLA_ALUMNOS}}
+        </tbody>
+    </table>
+
+    <p><b>(1.00 equivale a materia aprobada / 0.00 equivale a materia reprobada.) </b></p>
+
+    <!-- MATERIAS REPROBADAS -->
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="margin-bottom: 8px;">
+            ° Materias reprobadas. Anotar las materias en el orden de la retícula de la carrera de __________________ para primer semestre son:
+        </p>
+    </div>
+    <table style="width: 90%; margin: 0 auto 20px auto; border: 1px solid black; border-collapse: collapse;">
+        <tr>
+            <td style="border: 1px solid black;">1. {{MAT1}}</td>
+            <td style="border: 1px solid black;">2. {{MAT2}}</td>
+            <td style="border: 1px solid black;">3. {{MAT3}}</td>
+            <td style="border: 1px solid black;">4. {{MAT4}}</td>
+            <td style="border: 1px solid black;">5. {{MAT5}}</td>
+            <td style="border: 1px solid black;">6. {{MAT6}}</td>
+            <td style="border: 1px solid black;">7. {{MAT7}}</td>
+        </tr>
+    </table>
+
+
+
+
+
+    <!-- EXPLICACIONES -->
+    <div style="margin-left: 10px; margin-top: 8px;">
+
+        <p style="margin: 3px 0;">
+            ° <b><ins>A</ins></b> Cumplió cabalmente con las entrevistas establecidas en el semestre.
+        </p>
+
+        <p style="margin: 3px 0;">
+            ° <b><ins>B</ins></b> No cumplió con las citas entrevistas en el semestre.
+        </p>
+
+        <p style="margin: 6px 0 3px 0;">
+            * <b><ins>Situación Final</ins></b>
+        </p>
+
+        <p style="margin: 2px 0;">D = Estudiante destacado.</p>
+        <p style="margin: 2px 0;">N = Estudiante regular.</p>
+        <p style="margin: 2px 0;">I = Estudiante irregular.</p>
+        <p style="margin: 2px 0;">R = Estudiante en riesgo.</p>
+
+        <p style="margin-top: 8px;">
+            NOTA: Informar a los estudiantes desde el inicio del semestre que deban entregar calificaciones finales
+            y haber asistido a las tres entrevistas, sólo así al final de los 3 semestres de tutoría se les liberarán
+            los créditos correspondientes.
+        </p>
+
+    </div>
+
+
+
+    <!-- PROGRAMA -->
+    <div class="espaciado-auto" style="margin-left:20px;">
+        <p><b><ins>PROGRAMA*.</ins></b></p>
+
+        <table style="width:70%; border-collapse:collapse;">
+            <tr>
+                <th style="background-color: lightgray;">Sesión número</th>
+                <th style="background-color: lightgray;">Tema por tratar**</th>
+                <th style="background-color: lightgray;">Fecha***</th>
+            </tr>
+
+            <tr style="height:25px;">
+                <td>1</td>
+                <td>Presentacion del docente</td>
+                <td>{{F0}}</td>
+            </tr>
+
+            <tr style="height:25px;">
+                <td>2</td>
+                <td>Actividad de entrevista 1</td>
+                <td>{{F1}}</td>
+            </tr>
+
+            <tr style="height:25px;">
+                <td>3</td>
+                <td>Actividad de entrevista 2</td>
+                <td>{{F2}}</td>
+            </tr>
+
+            <tr style="height:25px;">
+                <td>4</td>
+                <td>Actividad de entrevista 3</td>
+                <td>{{F3}}</td>
+            </tr>
+
+            <tr style="height:25px;">
+                <td>5</td>
+                <td>Cierre y conclusiones</td>
+                <td>{{F4}}</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+    <!-- NOTAS -->
+    <div class="espaciado-auto" style="margin-left:20px;">
+        <p>1-. Durante el semestre, el tutor debe atender en tutoría individual a aquellos/as estudiantes que requieren seguimiento especial por una situación académica / personal que estén viviendo o que solicitan atención.</p>
+        <p>
+            2-. Los temas a tratar en tutoría se eligen de común acuerdo con las necesidades actuales del grupo de estudiantes a tutorar, se puede tomar como
+            base el catálogo de temas que se incluye al final del documento
+        </p>
+        <p>3-. Las sesiones 1, 2 y 3 deben ser una por mes</p>
+
+        <p style="text-align:center; margin:15px 0;"><b>CATÁLOGO DE TEMAS QUE SE PUEDEN TRATAR EN TUTORÍA</b></p>
+        <p>
+            Los temas para tratar en tutoría deben estar enfocados a brindar elementos para incidir en los estudiantes tutorados/as
+            en los siguientes ámbitos: integración entre los alumnos y la dinámica de la Institución, seguimiento del proceso
+            académico de los alumnos, convivencia en el aula y en la escuela y orientación hacia un proyecto de vida.
+        </p>
+    </div>
+
+    <li></li><!-- TABLA: SUGERENCIA DE TEMAS -->
+    <table style="width:90%; font-size:12px; margin:10px auto; border-collapse:collapse;">
+        <tr>
+            <th style="background-color:#e0e0e0; border:1px solid black; padding:6px; text-align:center;">
+                Temas académicos
+            </th>
+            <th style="background-color:#e0e0e0; border:1px solid black; padding:6px; text-align:center;">
+                Temas de formación integral
+            </th>
+            <th style="background-color:#e0e0e0; border:1px solid black; padding:6px; text-align:center;">
+                Temas sociales
+            </th>
+        </tr>
+
+        <tr>
+            <!-- COLUMNA 1 -->
+            <td style="border:1px solid black; padding:8px; vertical-align:top;">
+                <ul style="margin:0; padding-left:18px;">
+                    <li>Riesgos del consumo de drogas</li>
+                    <li>Prevención del acoso</li>
+                    <li>Seguridad cibernética (peligros de las redes sociales)</li>
+                    <li>Valoración de las tradiciones culturales</li>
+                    <li>Importancia de los derechos humanos</li>
+                    <li>Prevención de la discriminación</li>
+                </ul>
+            </td>
+
+            <!-- COLUMNA 2 -->
+            <td style="border:1px solid black; padding:8px; vertical-align:top;">
+                <ul style="margin:0; padding-left:18px;">
+                    <li>Plan de vida</li>
+                    <li>Línea de vida</li>
+                    <li>Análisis de fortalezas y dificultades</li>
+                    <li>Trabajo en equipo</li>
+                    <li>Igualdad de género</li>
+                    <li>Violencia familiar</li>
+                    <li>Enfermedades de transmisión sexual y su prevención</li>
+                </ul>
+            </td>
+
+            <!-- COLUMNA 3 -->
+            <td style="border:1px solid black; padding:8px; vertical-align:top;">
+                <ul style="margin:0; padding-left:18px;">
+                    <li>Riesgos del consumo de drogas</li>
+                    <li>Prevención del acoso</li>
+                    <li>Seguridad cibernética (peligros de las redes sociales)</li>
+                    <li>Valoración de las tradiciones culturales</li>
+                    <li>Importancia de los derechos humanos</li>
+                    <li>Prevención de la discriminación</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <p>
+        Para tratar estos temas, el tutor puede:
+        Usar apoyos como videos documentales, películas o noticias,
+        Formar el debate en el aula,
+        Programar la vista de un experto en el tema,
+        Proponer actividades de autococimiento,
+    </p>
+
+    <p>
+        <b>
+            Notas importantes.
+        </b>
+        Este catálogo de temas no es único, puede sufrir cambios, de acuerdo con las necesidades actuales de los/las estudiantes
+        o nuevas tendencias en el ámbito educativo / social / profesional. Únicamente sirve como guía para los temas a elegir
+        para el Plan de Acción Tutorial (PAT).
+
+
+    <p style="text-align:center; font-size:13px;">
+        Favor de llenar los siguientes recuadros, que apliquen:
+    </p>
+
+    <table style="width:90%; margin:10px auto; border-collapse:collapse; font-size:12px;">
+        <tr>
+            <th style="border:1px solid black; padding:8px;">
+                No. de Tutorados asignados en el semestre.
+            </th>
+            <th style="border:1px solid black; padding:8px;">
+                No. de Tutorados asignados que ya habían liberado tutoría anteriormente.
+            </th>
+            <th style="border:1px solid black; padding:8px;">
+                No. de Tutorados que han desertado en el semestre.
+            </th>
+            <th style="border:1px solid black; padding:8px;">
+                No. de Tutorados que continúan a la fecha.
+            </th>
+            <th style="border:1px solid black; padding:8px;">
+                % de Deserción.
+            </th>
+
+            <!-- REPROBACIÓN -->
+            <th style="border:1px solid black; padding:0;" colspan="4">
+                <div style="padding:8px 4px; text-align:center;">
+                    % de Reprobación<br />
+                    - Considerar la situación final
+                </div>
+            </th>
+        </tr>
+
+        <tr style="height:45px;">
+            <td style="border:1px solid black;"></td>
+            <td style="border:1px solid black;"></td>
+            <td style="border:1px solid black;"></td>
+            <td style="border:1px solid black;"></td>
+            <td style="border:1px solid black;"></td>
+
+            <!-- SUBTABLA D N I R -->
+            <td colspan="4" style="border:1px solid black; padding:0;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="border-right:1px solid black; text-align:center; padding:10px;">D</td>
+                        <td style="border-right:1px solid black; text-align:center; padding:10px;">N</td>
+                        <td style="border-right:1px solid black; text-align:center; padding:10px;">I</td>
+                        <td style="text-align:center; padding:10px;">R</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- OBSERVACIONES -->
+    <table style="width:90%; margin:30px auto; border-collapse:collapse; font-size:12px;">
+        <tr>
+            <th style="border:1px solid black; padding:6px; text-align:center;">
+                Observaciones
+            </th>
+        </tr>
+        <tr style="height:80px;">
+            <td style="border:1px solid black; padding:6px; vertical-align:top;">
+                {{OBS}}
+            </td>
+        </tr>
+    </table>
+
+    <!-- ALUMNOS EN SITUACIÓN ESPECIAL -->
+    <p style="width:90%; margin:20px auto 10px auto; font-size:12px; text-align:left;">
+        Favor de llenar el siguiente cuadro, con los datos de los alumnos en situación especial.
+    </p>
+
+    <table style="width:90%; margin:0 auto 40px auto; border-collapse:collapse; font-size:12px;">
+        <tr>
+            <th style="border:1px solid black; padding:6px; text-align:center; width:20%;">
+                No. de control
+            </th>
+            <th style="border:1px solid black; padding:6px; text-align:center; width:30%;">
+                Nombre del alumno
+            </th>
+            <th style="border:1px solid black; padding:6px; text-align:center; width:50%;">
+                Situación académica actual, acciones realizadas en su apoyo y<br />
+                motivos de deserción.
+            </th>
+        </tr>
+
+        <tr>
+            <td style="border:1px solid black; padding:6px;">{{CTRL1}}</td>
+            <td style="border:1px solid black; padding:6px;">{{NOM1}}</td>
+            <td style="border:1px solid black; padding:6px;">{{SIT1}}</td>
+        </tr>
+
+        <tr>
+            <td style="border:1px solid black; padding:6px;">{{CTRL2}}</td>
+            <td style="border:1px solid black; padding:6px;">{{NOM2}}</td>
+            <td style="border:1px solid black; padding:6px;">{{SIT2}}</td>
+        </tr>
+
+        <tr>
+            <td style="border:1px solid black; padding:6px;">{{CTRL3}}</td>
+            <td style="border:1px solid black; padding:6px;">{{NOM3}}</td>
+            <td style="border:1px solid black; padding:6px;">{{SIT3}}</td>
+        </tr>
+    </table>
+
+
+    <tr style="height:35px;">
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+    </tr>
+
+    <tr style="height:35px;">
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+    </tr>
+
+    <tr style="height:35px;">
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+        <td style="border:1px solid black;"></td>
+    </tr>
+    </table>
+
+
+
+    <!-- FIRMAS -->
+    <div class="espaciado-auto" style="text-align:center; margin:50px;">
+        <div style="border-top: 1px solid black; width:300px; margin:auto;"></div>
+        <p><b>__________________________________</b></p>
+        <p><b>Nombre y firma del tutor</b></p>
+    </div>
+
+
+
+    <!-- LOGOS FINALES -->
+    <div class="espaciado-auto" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
+
+        <img style="width:140px;" src="{{base}}/PDF/Recursos/ITALogo.png" alt="ITA Logo" />
+
+        <div style="display:flex; gap:10px; margin-top:20px; justify-content:center;">
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo1.png" alt="Logo 1" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo2.png" alt="Logo 2" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo3.png" alt="Logo 3" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo4.png" alt="Logo 4" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo5.png" alt="Logo 5" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo6.png" alt="Logo 6" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo7.png" alt="Logo 7" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo8.png" alt="Logo 8" />
+            <img style="width:35px;" src="{{base}}/PDF/Recursos/Logo9.png" alt="Logo 9" />
+        </div>
+    </div>
+
+</body>
+</html>
+
